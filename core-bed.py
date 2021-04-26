@@ -1,3 +1,5 @@
+###Developed by Michael Betti, April 2021
+
 import os, sys, requests, argparse, logging, pybedtools, pandas as pd
 
 parser = argparse.ArgumentParser(add_help = True)
@@ -557,3 +559,5 @@ concatenated_df = pd.concat(all_data_frames)
 #Convert the concatenated data frame back to pybedtools objects and sort by coordinates
 concatenated_bed = pybedtools.BedTool().from_dataframe(concatenated_df).sort()
 concatenated_bed.saveas(args.output)
+
+###Developed by Michael J Betti, April 2021
