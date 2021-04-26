@@ -1,2 +1,3 @@
 # CoRE-BED
 ## Introduction
+CoRE-BED, or Classifier of Regulatory Elements in a BED file, is a Python-based tool developed to determine whether coordinates in a UCSC BED file fall within a putative cis-regulatory element (promoter or enhancer). Based on each coordinate's overlap (or lack thereof) with annotated transcription start sites (TSSs), as well as H3K4me1, H3K4me3, H3K27ac, and H3K27me3 histone marks, it will be classified as either an active promoter, bivalent promoter, silenced promoter, unclassified element within 2 kb of a TSS, active enhancer, poised enhancer, primed enhancer, or unclassified element not within 2 kb of a TSS. This classification method can be best visualized as a tree structure:
