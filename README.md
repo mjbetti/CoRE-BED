@@ -18,4 +18,8 @@ The main script ```core-bed.py``` takes in a user-provided UCSC BED file and dow
 
 Upon preparation of all reference files, the BED containing transcription start sites (TSSs) is modified by subtracting 2 kb from each start coordinate and adding 2 kb to each end coordinate. The script then uses these modified TSS coordinates to determine whether each input coordinate overlaps with a genomic interval within 2 kb of a TSS. Those input coordinates that do have overlap are considered "candidate promoters" and those that do not are considered "candidate enhancers."
 
-For the set of candidate promoters, the script next determines 
+For the set of candidate promoters, the script next determines whether each coordinate overlaps with the H3K4me3, a histone modification commonly associated with promoter regions in active chromatin. Those that do overlap with H3K4me3 are subsequently evaluated for overlap with H3K27me3, a repressive histone mark. If a coordinate has both H3K4me3 and H3K27me3, it is classified as a "bivalent promoter," meaning that while not presently active, it is "poised" to become either active or more permanently repressed by losing one of the two histone marks. If no H3K27me3 is present, then the element is classified as an "active promoter."
+
+Conversely, coordinates that do not have any overlap with H3K4me3 are next evaluated for overlap with H3K27me3. Elements that are marked with only H3K27me3 are classified as "silenced promoters," while those that do not overlap with either of the two marks are classified as an "unclassified element within 2 kb of a TSS."
+
+
