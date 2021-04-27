@@ -26,7 +26,9 @@ With our set of candidate enhancers, CoRE-BED will search for overlap with three
 
 ## Dependencies
 All dependencies (including ```python``` (3.6.13), ```requests``` (2.25.1), ```pybedtools``` (0.7.10), and ```pandas``` (1.1.3)) can be easily installed as an Anaconda environment using the included ```core-bed_env.yml``` file:
-```conda env create -f core-bed_env.yml```
+```
+conda env create -f core-bed_env.yml
+```
 
 ## Usage
 
