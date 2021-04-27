@@ -38,5 +38,14 @@ conda activate core-bed_env
 Use the ```-h``` or ```--help``` flag to view all available options:
 ```
 python core-bed.py -h
+```
 
+A typical run of the CoRE-BED method would look something like the following:
+```
+python core-bed.py \
+-i input_file_based_on_hg38.bed \
+-g hg38 \
+-t blood \
+-o annotated_input_coordinates.bed \
+-v
 ```
