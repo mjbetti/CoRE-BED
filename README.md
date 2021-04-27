@@ -25,10 +25,8 @@ Conversely, coordinates that do not have any overlap with H3K4me3 are next evalu
 With our set of candidate enhancers, CoRE-BED will search for overlap with three enhancer-associated histone marks, H3K4me1, H3K27ac, and H3K27me3. The script first determines whether there is any overlap with H3K4me1, a mark commonly used to denote the presence of an enhancer. If H3K4me1 is present, then we next search for co-localization of the active mark H3K27ac. If both marks localize at a single element, then we classify this as an "active enhancer." Otherwise, CoRE-BED will search for overlap with the repressive mark H3K27me3. Elements that show a co-localization of H3K4me1 and H3K27me3 will be classified as "poised enhancers," while those marked with only H3K4me1 are classified as "primed enhancers." The remaining candidate enhancer regions overlapping with none of these histone marks are classified as "unclassified elements beyond 2 kb of a TSS."
 
 ## Dependencies
-All dependencies can be easily installed as an Anaconda environment using the included ```core-bed_env.yml``` file:
-```
-
-```
+All dependencies (including ```python``` (3.6.13), ```requests``` (2.25.1), ```pybedtools``` (0.7.10), and ```pandas``` (1.1.3)) can be easily installed as an Anaconda environment using the included ```core-bed_env.yml``` file:
+```conda env create -f core-bed_env.yml```
 
 ## Usage
 
