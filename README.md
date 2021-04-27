@@ -29,10 +29,14 @@ All dependencies (including ```python``` (3.6.13), ```requests``` (2.25.1), ```p
 ```
 conda env create -f core-bed_env.yml
 ```
+...and then activated using the following command:
+```
+conda activate core-bed_env
+```
 
 ## Usage
 Use the ```-h``` or ```--help``` flag to view all available options:
 ```
-core-bed.py -h
+python core-bed.py -h
 
 ```
