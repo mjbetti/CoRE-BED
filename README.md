@@ -38,6 +38,24 @@ conda activate core-bed_env
 Use the ```-h``` or ```--help``` flag to view all available options:
 ```
 python core-bed.py -h
+
+usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE [-o OUTPUT] [-v]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        the input bed file (required)
+  -g REF_GENOME, --ref_genome REF_GENOME
+                        the human reference genome build on which the input
+                        coordinates are based (required) (valid options:
+                        GRCh38/hg38 and GRCh37/hg19)
+  -t TISSUE, --tissue TISSUE
+                        the tissue of interest (required) (valid options:
+                        Blood, Brain, ES, Heart, Intestine, Liver, Lung,
+                        Muscle, Skin, Thyroid)
+  -o OUTPUT, --output OUTPUT
+                        the name of the output file
+  -v, --verbose         return logging as terminal output
 ```
 
 A typical run of the CoRE-BED method would look something like the following:
@@ -49,3 +67,22 @@ python core-bed.py \
 -o annotated_input_coordinates.bed \
 -v
 ```
+...with each of the user-specified arguments specifying:
+* ```-i``` or ```--input``` - A set of genomic coordinates in UCSC BED format (https://genome.ucsc.edu/FAQ/FAQformat.html)
+* ```-g``` or ```--ref_genome``` - The reference genome build on which the input coordinates are based
+* ```-t``` or ```--tissue``` - The tissue type to which the input coordinates will be compared
+* ```-o``` or ```--output``` - The desired name of the output file (default is ```out.bed```)
+* ```-v``` or ```--verbose``` - Enable verbosity (i.e. print the script progress out to the console)
+
+The final output file will be a new BED file, in which the input coordinates are annotated based on how the genomic region in which they fall was classified. The BED will consist of three data columns: chr, start, end, and annotation.
+
+## References
+Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424.
+
+Mas G, Blanco E, Ballaré C, Sansó M, Spill YG, Hu D, et al. Promoter bivalency favors an open chromatin architecture in embryonic stem cells. Nat Genet. 2018;50: 1452–1462.
+
+McKinney, Wes. 2010. “Data Structures for Statistical Computing in Python.” Proceedings of the 9th Python in Science Conference. https://doi.org/10.25080/majora-92bf1922-00a.
+
+Sha K, Boyer LA. The chromatin signature of pluripotent cells. StemBook. Cambridge (MA): Harvard Stem Cell Institute; 2009.
+
+Shlyueva D, Stampfel G, Stark A. Transcriptional enhancers: from properties to genome-wide predictions. Nat Rev Genet. 2014;15: 272–286.
