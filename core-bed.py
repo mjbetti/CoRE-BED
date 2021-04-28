@@ -18,9 +18,6 @@ assert args.tissue, "Must specify tissue type (-t, --tissue)"
 #Check that specified tissue type is one of the 10 valid options
 assert args.tissue.lower() == "blood" or args.tissue.lower() == "brain" or args.tissue.lower() == "es" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "thyroid", "Tissue type must be one of the 10 valid options (Blood, Brain, ES, Heart, Intestine, Liver, Lung, Muscle, Skin, Thyroid)"
 
-#Check that not too many arguments are specified
-#assert len(args) < 6, "Too many arguments specified"
-
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 if args.verbose:
 	print("Classifying {tissue_type} cis-regulatory regions in {input_file}...".format(input_file = args.input, tissue_type = args.tissue))
