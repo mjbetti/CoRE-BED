@@ -1,13 +1,13 @@
-###Developed by Michael Betti, April 2021
+###Developed by Michael J Betti, April 2021
 
-import os, sys, requests, argparse, logging, pybedtools, pandas as pd
+import os, sys, requests, argparse, pybedtools, pandas as pd
 
 parser = argparse.ArgumentParser(add_help = True)
-parser.add_argument("-i", "--input", type = str, help = "the input bed file")
-parser.add_argument("-g", "--ref_genome", type = str, help = "the human reference genome build on which the input coordinates are based (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, help = "the tissue of interest (valid options: Blood, Brain, ES, Heart, Intestine, Liver, Lung, Muscle, Skin, Thyroid)")
-parser.add_argument("-o", "--output", type = str, help = "the name of the output file", default = "out.bed")
-parser.add_argument("-v", "--verbose", help = "return script progress as terminal output", action = "store_true")
+parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
+parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Blood, Brain, ES, Heart, Intestine, Liver, Lung, Muscle, Skin, Thyroid)")
+parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
+parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 args = parser.parse_args()
 
 #Check that required arguments are specified
