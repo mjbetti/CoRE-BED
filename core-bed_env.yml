@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
 <<<<<<< HEAD
+<<<<<<< HEAD
   - bedtools
   - blas
   - brotlipy
@@ -52,6 +53,8 @@ dependencies:
   - xz
   - zlib
 =======
+=======
+>>>>>>> 7baf948581060ea9ea22b1f4d8706aa57e175960
   - bedtools=2.30.0=h6eb76b4_0
   - blas=1.0=mkl
   - brotlipy=0.7.0=py36h9ed2024_1003
@@ -100,4 +103,7 @@ dependencies:
   - xz=5.2.5=h1de35cc_0
   - zlib=1.2.11=h1de35cc_3
 prefix: /opt/anaconda3/envs/prom_enh_classifier_env
+<<<<<<< HEAD
 >>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
+=======
+>>>>>>> 7baf948581060ea9ea22b1f4d8706aa57e175960

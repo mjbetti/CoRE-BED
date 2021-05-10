@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 ###Developed by Michael J Betti, April 2021, updated May 2021
-=======
-###Developed by Michael J Betti, April 2021
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 
 import os, sys, requests, argparse, pybedtools, pandas as pd
 
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Blood, Brain, ES, Heart, Intestine, Liver, Lung, Muscle, Skin, Thyroid)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)")
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 args = parser.parse_args()
@@ -20,7 +16,7 @@ assert args.ref_genome, "Must specify reference genome build (-g, --ref_genome)"
 assert args.tissue, "Must specify tissue type (-t, --tissue)"
 
 #Check that specified tissue type is one of the 10 valid options
-assert args.tissue.lower() == "blood" or args.tissue.lower() == "brain" or args.tissue.lower() == "es" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "thyroid", "Tissue type must be one of the 10 valid options (Blood, Brain, ES, Heart, Intestine, Liver, Lung, Muscle, Skin, Thyroid)"
+assert args.tissue.lower() == "blood" or args.tissue.lower() == "brain" or args.tissue.lower() == "es" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "thyroid", "Tissue type must be one of the 26 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 if args.verbose:
@@ -39,8 +35,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 	out_path_tss = os.path.join('ref_files', "refTSS_v3.1_human_coordinate.hg38.bed.gz")
 	r = requests.get(url_tss, allow_redirects=True)
 	open(out_path_tss, 'wb').write(r.content)
-	
-<<<<<<< HEAD
+
 	#Adipose (Homo sapiens subcutaneous abdominal adipose tissue tissue nuclear fraction female adult (49 years))
 	if args.tissue.lower() == "adipose":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF534VNL/@@download/ENCFF534VNL.bed.gz"
@@ -97,9 +92,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "aorta_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-	
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
+
 	#Blood (Homo sapiens peripheral blood mononuclear cell male adult (39 years))	
 	if args.tissue.lower() == "blood":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF734KLT/@@download/ENCFF734KLT.bed.gz"
@@ -118,7 +111,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "blood_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-<<<<<<< HEAD
 	
 	#Breast (Homo sapiens breast epithelium tissue female adult (53 years))
 	elif args.tissue.lower() == "breast":
@@ -174,27 +166,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF291DHI/@@download/ENCFF291DHI.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "ebv_transformed_lymphocyte_27me3_hg38.bed.gz")
-=======
-		
-	#Brain (Homo sapiens SK-N-SH)
-	elif args.tissue.lower() == "brain":
-		url_4me1 = "https://www.encodeproject.org/files/ENCFF632FAM/@@download/ENCFF632FAM.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "brain_4me1_hg38.bed.gz")
-		r = requests.get(url_4me1, allow_redirects=True)
-		open(out_path_4me1, 'wb').write(r.content)
-		url_4me3 = "https://www.encodeproject.org/files/ENCFF682JYE/@@download/ENCFF682JYE.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "brain_4me3_hg38.bed.gz")
-		r = requests.get(url_4me3, allow_redirects=True)
-		open(out_path_4me3, 'wb').write(r.content)
-		url_27ac = "https://www.encodeproject.org/files/ENCFF138VUT/@@download/ENCFF138VUT.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "brain_27ac_hg38.bed.gz")
-		r = requests.get(url_27ac, allow_redirects=True)
-		open(out_path_27ac, 'wb').write(r.content)
-		url_27me3 = "https://www.encodeproject.org/files/ENCFF277NRX/@@download/ENCFF277NRX.bed.gz"
-		out_path_27me3 = os.path.join('ref_files', "brain_27me3_hg38.bed.gz")
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
-		r = requests.get(url_27me3, allow_redirects=True)
-		open(out_path_27me3, 'wb').write(r.content)
 		
 	#Embryonic stem cell (Homo sapiens H1)
 	elif args.tissue.lower() == "es":
@@ -214,8 +185,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "es_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-		
-<<<<<<< HEAD
+	
 	#Esophagus muscularis mucosa (Homo sapiens esophagus muscularis mucosa tissue female adult (51 years))
 	elif args.tissue.lower() == "esophagus_muscularis_mucosa":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF473ELV/@@download/ENCFF473ELV.bed.gz"
@@ -254,8 +224,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Heart (Homo sapiens heart left ventricle tissue female adult (53 years))
 	elif args.tissue.lower() == "heart":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF194KSV/@@download/ENCFF194KSV.bed.gz"
@@ -293,7 +261,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "intestine_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-<<<<<<< HEAD
 		
 	#Kidney (Homo sapiens kidney tissue male adult (67 years), Homo sapiens kidney tissue female embryo (120 days) for H3K27me3 - only dataset for kidney)
 	elif args.tissue.lower() == "kidney":
@@ -313,8 +280,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "kidney_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 
 	#Liver (Homo sapiens liver tissue male adult (32 years))
 	elif args.tissue.lower() == "liver":
@@ -373,7 +338,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Neuron (Homo sapiens SK-N-SH)
 	elif args.tissue.lower() == "neuron":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF632FAM/@@download/ENCFF632FAM.bed.gz"
@@ -449,9 +413,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "prostate_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
+
 	#Skin (Homo sapiens suprapubic skin tissue male adult (37 years))
 	elif args.tissue.lower() == "skin":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF800MDH/@@download/ENCFF800MDH.bed.gz"
@@ -471,7 +433,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Spleen (Homo sapiens spleen tissue male adult (37 years))
 	elif args.tissue.lower() == "spleen":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF652QYY/@@download/ENCFF652QYY.bed.gz"
@@ -510,8 +471,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Thyroid (Homo sapiens thyroid gland tissue female adult (51 years))
 	elif args.tissue.lower() == "thyroid":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF346IPY/@@download/ENCFF346IPY.bed.gz"
@@ -530,7 +489,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "thyroid_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-<<<<<<< HEAD
 		
 	#Uterus (Homo sapiens uterus tissue female adult (51 years))
 	elif args.tissue.lower() == "uterus":
@@ -569,8 +527,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "vagina_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 
 ###################################################################################
 #GRCh37/hg19
@@ -580,7 +536,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 	r = requests.get(url_tss, allow_redirects=True)
 	open(out_path_tss, 'wb').write(r.content)
 	
-<<<<<<< HEAD
 	#Adipose (Homo sapiens subcutaneous abdominal adipose tissue tissue nuclear fraction female adult (49 years))
 	if args.tissue.lower() == "adipose":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF258ONX/@@download/ENCFF258ONX.bed.gz"
@@ -638,8 +593,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 	
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Blood (Homo sapiens peripheral blood mononuclear cell male adult (39 years))	
 	if args.tissue.lower() == "blood":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF553SEK/@@download/ENCFF553SEK.bed.gz"
@@ -659,7 +612,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Breast (Homo sapiens breast epithelium tissue female adult (53 years))
 	elif args.tissue.lower() == "breast":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF336DDM/@@download/ENCFF336DDM.bed.gz"
@@ -714,26 +666,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF247VUO/@@download/ENCFF247VUO.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "ebv_transformed_lymphocyte_27me3_hg19.bed.gz")
-=======
-	#Brain (Homo sapiens SK-N-SH)
-	elif args.tissue.lower() == "brain":
-		url_4me1 = "https://www.encodeproject.org/files/ENCFF580GTZ/@@download/ENCFF580GTZ.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "brain_4me1_hg19.bed.gz")
-		r = requests.get(url_4me1, allow_redirects=True)
-		open(out_path_4me1, 'wb').write(r.content)
-		url_4me3 = "https://www.encodeproject.org/files/ENCFF363ZFM/@@download/ENCFF363ZFM.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "brain_4me3_hg19.bed.gz")
-		r = requests.get(url_4me3, allow_redirects=True)
-		open(out_path_4me3, 'wb').write(r.content)
-		url_27ac = "https://www.encodeproject.org/files/ENCFF362OBM/@@download/ENCFF362OBM.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "brain_27ac_hg19.bed.gz")
-		r = requests.get(url_27ac, allow_redirects=True)
-		open(out_path_27ac, 'wb').write(r.content)
-		url_27me3 = "https://www.encodeproject.org/files/ENCFF102YDR/@@download/ENCFF102YDR.bed.gz"
-		out_path_27me3 = os.path.join('ref_files', "brain_27me3_hg19.bed.gz")
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
-		r = requests.get(url_27me3, allow_redirects=True)
-		open(out_path_27me3, 'wb').write(r.content)
 		
 	#Embryonic stem cell (Homo sapiens H1)
 	elif args.tissue.lower() == "es":
@@ -754,7 +686,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Esophagus muscularis mucosa (Homo sapiens esophagus muscularis mucosa tissue female adult (51 years))
 	elif args.tissue.lower() == "esophagus_muscularis_mucosa":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF278OGS/@@download/ENCFF278OGS.bed.gz"
@@ -793,8 +724,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Heart (Homo sapiens heart left ventricle tissue female adult (53 years))
 	elif args.tissue.lower() == "heart":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF266FCG/@@download/ENCFF266FCG.bed.gz"
@@ -832,7 +761,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		out_path_27me3 = os.path.join('ref_files', "intestine_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-<<<<<<< HEAD
 		
 	#Kidney (Homo sapiens kidney tissue male adult (67 years), Homo sapiens kidney tissue female embryo (120 days) for H3K27me3 - only dataset for kidney)
 	elif args.tissue.lower() == "kidney":
@@ -852,8 +780,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		out_path_27me3 = os.path.join('ref_files', "kidney_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	
 	#Liver (Homo sapiens liver tissue male adult (32 years))
 	elif args.tissue.lower() == "liver":
@@ -912,7 +838,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Neuron (Homo sapiens SK-N-SH)
 	elif args.tissue.lower() == "neuron":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF580GTZ/@@download/ENCFF580GTZ.bed.gz"
@@ -989,8 +914,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Skin (Homo sapiens suprapubic skin tissue male adult (37 years))
 	elif args.tissue.lower() == "skin":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF904DTJ/@@download/ENCFF904DTJ.bed.gz"
@@ -1010,7 +933,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-<<<<<<< HEAD
 	#Spleen (Homo sapiens spleen tissue male adult (37 years))
 	elif args.tissue.lower() == "spleen":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF585JQZ/@@download/ENCFF585JQZ.bed.gz"
@@ -1049,8 +971,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	#Thyroid (Homo sapiens thyroid gland tissue female adult (51 years))
 	elif args.tissue.lower() == "thyroid":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF346LTA/@@download/ENCFF346LTA.bed.gz"
@@ -1069,7 +989,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		out_path_27me3 = os.path.join('ref_files', "thyroid_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-<<<<<<< HEAD
 		
 	#Uterus (Homo sapiens uterus tissue female adult (51 years))
 	elif args.tissue.lower() == "uterus":
@@ -1108,8 +1027,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		out_path_27me3 = os.path.join('ref_files', "vagina_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
-=======
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
 	
 ###Import all of the bed files to be worked on (input and histone mark ChIP-seq) using pybedtools
 if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
@@ -1244,8 +1161,5 @@ concatenated_df = pd.concat(all_data_frames)
 concatenated_bed = pybedtools.BedTool().from_dataframe(concatenated_df).sort()
 concatenated_bed.saveas(args.output)
 
-<<<<<<< HEAD
+
 ###Developed by Michael J Betti, April 2021, updated May 2021
-=======
-###Developed by Michael J Betti, April 2021
->>>>>>> 44e40c043218d796c99bf02c2b2d4a3df05f84c6
