@@ -12,7 +12,7 @@ The main script ```core-bed.py``` takes in a user-provided UCSC BED file and dow
 * ```Breast``` - *Homo sapiens* breast epithelium tissue female adult (53 years)
 * ```Cultured_fibroblast``` - *Homo sapiens* IMR-90
 * ```EBV_transformed_lymphocyte``` - *Homo sapiens* GM12878
-* ```Embryonic stem cell``` - *Homo sapiens* H1
+* ```ES``` - *Homo sapiens* H1 embryonic stem cell
 * ```Esophagus_muscularis_mucosa``` - *Homo sapiens* esophagus muscularis mucosa tissue female adult (51 years)
 * ```Esophagus_squamous_epithelium``` - *Homo sapiens* esophagus squamous epithelium tissue female adult (51 years)
 * ```Heart``` - *Homo sapiens* heart left ventricle tissue female adult (53 years)
