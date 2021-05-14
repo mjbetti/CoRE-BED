@@ -1,4 +1,10 @@
-###Developed by Michael J Betti, April 2021, updated May 2021
+###Developed by Michael J Betti, April 2021, updated 14 May 2021
+__author__ = "Michael J Betti"
+__copyright__ = "Copyright 2021, Michael J Betti"
+__license__ = "BSD"
+__maintainer__ = "Michael J Betti"
+__email__ = "mjbetti3@gmail.com"
+__status__ = "Development"
 
 import os, sys, requests, argparse, pybedtools, pandas as pd
 
@@ -1041,9 +1047,9 @@ if args.verbose:
 	print("Finding overlap of {input_file} coordinates with {tissue_type} histone ChIP-seq peaks based on {ref_genome}...".format(input_file = args.input, tissue_type = args.tissue, ref_genome = args.ref_genome))
 	print("\n")
 
-bed_tss_orig = pd.read_csv(bed_tss_path, sep = "\t", header = None, usecols = [0, 1, 2], names = ["chr", "start", "end"])
-bed_tss_orig["start"] = bed_tss_orig["start"] - 2000
-bed_tss_orig["end"] = bed_tss_orig["end"] + 2000
+bed_tss_orig = pd.read_csv(bed_tss_path, sep = "\t", header = None)
+bed_tss_orig.iloc[:,1] = bed_tss_orig.iloc[:,1] - 2000
+bed_tss_orig.iloc[:,2] = bed_tss_orig.iloc[:,2] + 2000
 bed_tss_orig = bed_tss_orig[bed_tss_orig.iloc[:,1] >= 0]
 bed_tss = pybedtools.BedTool().from_dataframe(bed_tss_orig)
 
@@ -1065,35 +1071,35 @@ overlaps_4me3 = overlaps_tss.intersect(bed_4me3)
 no_4me3 =overlaps_tss.intersect(bed_4me3, v = True)
 
 active_promoter = overlaps_4me3.intersect(bed_27me3, v = True)
-active_promoter = active_promoter.sort().merge()
+active_promoter = active_promoter.sort()
 
 bivalent_promoter = overlaps_4me3.intersect(bed_27me3)
-bivalent_promoter = bivalent_promoter.sort().merge()
+bivalent_promoter = bivalent_promoter.sort()
 
 silenced_promoter = no_4me3.intersect(bed_27me3)
-silenced_promoter = silenced_promoter.sort().merge()
+silenced_promoter = silenced_promoter.sort()
 
 marked_promoters = active_promoter + bivalent_promoter + silenced_promoter
 
 unclassified_overlaps_tss = overlaps_tss.intersect(marked_promoters, v = True)
-unclassified_overlaps_tss = unclassified_overlaps_tss.sort().merge()
+unclassified_overlaps_tss = unclassified_overlaps_tss.sort()
 
 #Classifying putative enhancers
 overlaps_4me1 = no_tss.intersect(bed_4me1)
 
 active_enhancer = overlaps_4me1.intersect(bed_27ac)
-active_enhancer = active_enhancer.sort().merge()
+active_enhancer = active_enhancer.sort()
 
 poised_enhancer = overlaps_4me1.intersect(bed_27me3)
-poised_enhancer = poised_enhancer.sort().merge()
+poised_enhancer = poised_enhancer.sort()
 
 active_and_poised = active_enhancer + poised_enhancer
 primed_enhancer = overlaps_4me1.intersect(active_and_poised, v = True)
-primed_enhancer = primed_enhancer.sort().merge()
+primed_enhancer = primed_enhancer.sort()
 
 active_poised_primed = active_and_poised + primed_enhancer
 unclassified_no_tss = no_tss.intersect(active_poised_primed, v = True)
-unclassified_no_tss = unclassified_no_tss.sort().merge()
+unclassified_no_tss = unclassified_no_tss.sort()
 
 #Print out the number of peaks/coordinates in each category
 if args.verbose:
@@ -1108,58 +1114,56 @@ if active_promoter.count() > 0:
 	active_promoter_df = pybedtools.BedTool.to_dataframe(active_promoter)
 	active_promoter_df["region_classification"] = "active_promoter"
 else:
-	active_promoter_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
-
+	active_promoter_df = pd.DataFrame()
+	
 if bivalent_promoter.count() > 0:
 	bivalent_promoter_df = pybedtools.BedTool.to_dataframe(bivalent_promoter)
 	bivalent_promoter_df["region_classification"] = "bivalent_promoter"
 else:
-	bivalent_promoter_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	bivalent_promoter_df = pd.DataFrame()
 
 if silenced_promoter.count() > 0:
 	silenced_promoter_df = pybedtools.BedTool.to_dataframe(silenced_promoter)
 	silenced_promoter_df["region_classification"] = "silenced_promoter"
 else:
-	silenced_promoter_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	silenced_promoter_df = pd.DataFrame()
 
 if unclassified_overlaps_tss.count() > 0:
 	unclassified_overlaps_tss_df = pybedtools.BedTool.to_dataframe(unclassified_overlaps_tss)
 	unclassified_overlaps_tss_df["region_classification"] = "unclassified_within_2kb_of_tss"
 else:
-	unclassified_overlaps_tss_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	unclassified_overlaps_tss_df = pd.DataFrame()
 
 if active_enhancer.count() > 0:
 	active_enhancer_df = pybedtools.BedTool.to_dataframe(active_enhancer)
 	active_enhancer_df["region_classification"] = "active_enhancer"
 else:
-	active_enhancer_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	active_enhancer_df = pd.DataFrame()
 
 if poised_enhancer.count() > 0:
 	poised_enhancer_df = pybedtools.BedTool.to_dataframe(poised_enhancer)
 	poised_enhancer_df["region_classification"] = "poised_enhancer"
 else:
-	poised_enhancer_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	poised_enhancer_df = pd.DataFrame()
 
 if primed_enhancer.count() > 0:
 	primed_enhancer_df = pybedtools.BedTool.to_dataframe(primed_enhancer)
 	primed_enhancer_df["region_classification"] = "primed_enhancer"
 else:
-	primed_enhancer_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	primed_enhancer_df = pd.DataFrame()
 
 if unclassified_no_tss.count() > 0:
 	unclassified_no_tss_df = pybedtools.BedTool.to_dataframe(unclassified_no_tss)
 	unclassified_no_tss_df["region_classification"] = "unclassified_beyond_2kb_of_tss"
 else:
-	unclassified_no_tss_df = pd.DataFrame(columns = ["chrom", "start", "end", "region_classification"])
+	unclassified_no_tss_df = pd.DataFrame()
 	
-#Concatenate all of the pandas DataFrame objects into one
+#Concatenate all of the pandas DataFrame objects into one and remove all duplicate lines
 all_data_frames = [active_promoter_df, bivalent_promoter_df, silenced_promoter_df, unclassified_overlaps_tss_df, active_enhancer_df, poised_enhancer_df, primed_enhancer_df, unclassified_no_tss_df]
 
 concatenated_df = pd.concat(all_data_frames)
+concatenated_df = concatenated_df.drop_duplicates()
 
 #Convert the concatenated data frame back to pybedtools objects and sort by coordinates
 concatenated_bed = pybedtools.BedTool().from_dataframe(concatenated_df).sort()
 concatenated_bed.saveas(args.output)
-
-
-###Developed by Michael J Betti, April 2021, updated May 2021
