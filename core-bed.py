@@ -11,7 +11,7 @@ import os, sys, requests, argparse, pybedtools, pandas as pd
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)")
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 args = parser.parse_args()
@@ -22,7 +22,7 @@ assert args.ref_genome, "Must specify reference genome build (-g, --ref_genome)"
 assert args.tissue, "Must specify tissue type (-t, --tissue)"
 
 #Check that specified tissue type is one of the 10 valid options
-assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina", "Tissue type must be one of the 26 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)"
+assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina", "Tissue type must be one of the 26 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 if args.verbose:
@@ -172,6 +172,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF291DHI/@@download/ENCFF291DHI.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "ebv_transformed_lymphocyte_27me3_hg38.bed.gz")
+		open(out_path_27me3, 'wb').write(r.content)
 		
 	#Embryonic stem cell (Homo sapiens H1)
 	elif args.tissue.lower() == "es":
@@ -265,6 +266,25 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF310IST/@@download/ENCFF310IST.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "intestine_27me3_hg38.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+	
+	#iPS cell (Homo sapiens iPS DF 19.11)
+	elif args.tissue.lower() == "ips":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF314LSR/@@download/ENCFF314LSR.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "ips_4me1_hg38.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF450VVJ/@@download/ENCFF450VVJ.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "ips_4me3_hg38.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF037RXP/@@download/ENCFF037RXP.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "ips_27ac_hg38.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF844FEB/@@download/ENCFF844FEB.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "ips_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
@@ -765,6 +785,25 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF099PRP/@@download/ENCFF099PRP.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "intestine_27me3_hg19.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+		
+	#iPS cell (Homo sapiens iPS DF 19.11)
+	elif args.tissue.lower() == "ips":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF485HSK/@@download/ENCFF485HSK.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "ips_4me1_hg19.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF538JKF/@@download/ENCFF538JKF.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "ips_4me3_hg19.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF631JHU/@@download/ENCFF631JHU.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "ips_27ac_hg19.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF396DQE/@@download/ENCFF396DQE.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "ips_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
