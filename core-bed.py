@@ -138,17 +138,17 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27me3, 'wb').write(r.content)
 		
 	#Cultured fibroblast (Homo sapiens IMR-90)
-	elif args.tissue.lower() == "cultured_fibroblasts":
+	elif args.tissue.lower() == "cultured_fibroblast":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF611UWF/@@download/ENCFF611UWF.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "cultured_fibroblasts_4me1_hg38.bed.gz")
+		out_path_4me1 = os.path.join('ref_files', "cultured_fibroblast_4me1_hg38.bed.gz")
 		r = requests.get(url_4me1, allow_redirects=True)
 		open(out_path_4me1, 'wb').write(r.content)
 		url_4me3 = "https://www.encodeproject.org/files/ENCFF093NQC/@@download/ENCFF093NQC.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "cultured_fibroblasts_4me3_hg38.bed.gz")
+		out_path_4me3 = os.path.join('ref_files', "cultured_fibroblast_4me3_hg38.bed.gz")
 		r = requests.get(url_4me3, allow_redirects=True)
 		open(out_path_4me3, 'wb').write(r.content)
 		url_27ac = "https://www.encodeproject.org/files/ENCFF805GNH/@@download/ENCFF805GNH.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "cultured_fibroblasts_27ac_hg38.bed.gz")
+		out_path_27ac = os.path.join('ref_files', "cultured_fibroblast_27ac_hg38.bed.gz")
 		r = requests.get(url_27ac, allow_redirects=True)
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF336IXL/@@download/ENCFF336IXL.bed.gz"
@@ -657,18 +657,18 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-	#Cultured fibroblasts (Homo sapiens IMR-90)
+	#Cultured fibroblast (Homo sapiens IMR-90)
 	elif args.tissue.lower() == "cultured_fibroblasts":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF830JTY/@@download/ENCFF830JTY.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "cultured_fibroblasts_4me1_hg19.bed.gz")
+		out_path_4me1 = os.path.join('ref_files', "cultured_fibroblast_4me1_hg19.bed.gz")
 		r = requests.get(url_4me1, allow_redirects=True)
 		open(out_path_4me1, 'wb').write(r.content)
 		url_4me3 = "https://www.encodeproject.org/files/ENCFF154CUR/@@download/ENCFF154CUR.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "cultured_fibroblasts_4me3_hg19.bed.gz")
+		out_path_4me3 = os.path.join('ref_files', "cultured_fibroblast_4me3_hg19.bed.gz")
 		r = requests.get(url_4me3, allow_redirects=True)
 		open(out_path_4me3, 'wb').write(r.content)
 		url_27ac = "https://www.encodeproject.org/files/ENCFF678QLP/@@download/ENCFF678QLP.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "cultured_fibroblasts_27ac_hg19.bed.gz")
+		out_path_27ac = os.path.join('ref_files', "cultured_fibroblast_27ac_hg19.bed.gz")
 		r = requests.get(url_27ac, allow_redirects=True)
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF041RLH/@@download/ENCFF041RLH.bed.gz"
