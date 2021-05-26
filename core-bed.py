@@ -345,25 +345,6 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-	#Muscle (Homo sapiens muscle of leg tissue female embryo (110 days))
-	elif args.tissue.lower() == "muscle":
-		url_4me1 = "https://www.encodeproject.org/files/ENCFF170ZFK/@@download/ENCFF170ZFK.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "muscle_4me1_hg38.bed.gz")
-		r = requests.get(url_4me1, allow_redirects=True)
-		open(out_path_4me1, 'wb').write(r.content)
-		url_4me3 = "https://www.encodeproject.org/files/ENCFF942MOM/@@download/ENCFF942MOM.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "muscle_4me3_hg38.bed.gz")
-		r = requests.get(url_4me3, allow_redirects=True)
-		open(out_path_4me3, 'wb').write(r.content)
-		url_27ac = "https://www.encodeproject.org/files/ENCFF154ZCF/@@download/ENCFF154ZCF.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "muscle_27ac_hg38.bed.gz")
-		r = requests.get(url_27ac, allow_redirects=True)
-		open(out_path_27ac, 'wb').write(r.content)
-		url_27me3 = "https://www.encodeproject.org/files/ENCFF672MZK/@@download/ENCFF672MZK.bed.gz"
-		out_path_27me3 = os.path.join('ref_files', "muscle_27me3_hg38.bed.gz")
-		r = requests.get(url_27me3, allow_redirects=True)
-		open(out_path_27me3, 'wb').write(r.content)
-		
 	#Neuron (Homo sapiens SK-N-SH)
 	elif args.tissue.lower() == "neuron":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF632FAM/@@download/ENCFF632FAM.bed.gz"
@@ -437,6 +418,25 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF198QRW/@@download/ENCFF198QRW.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "prostate_27me3_hg38.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+		
+	#Skeletal muscle (Homo sapiens muscle of leg tissue female embryo (110 days))
+	elif args.tissue.lower() == "skeletal_muscle":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF170ZFK/@@download/ENCFF170ZFK.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "muscle_4me1_hg38.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF942MOM/@@download/ENCFF942MOM.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "muscle_4me3_hg38.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF154ZCF/@@download/ENCFF154ZCF.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "muscle_27ac_hg38.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF672MZK/@@download/ENCFF672MZK.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "muscle_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 
@@ -864,25 +864,6 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
-	#Muscle (Homo sapiens muscle of leg tissue female embryo (110 days))
-	elif args.tissue.lower() == "muscle":
-		url_4me1 = "https://www.encodeproject.org/files/ENCFF746HHI/@@download/ENCFF746HHI.bed.gz"
-		out_path_4me1 = os.path.join('ref_files', "muscle_4me1_hg19.bed.gz")
-		r = requests.get(url_4me1, allow_redirects=True)
-		open(out_path_4me1, 'wb').write(r.content)
-		url_4me3 = "https://www.encodeproject.org/files/ENCFF027HBT/@@download/ENCFF027HBT.bed.gz"
-		out_path_4me3 = os.path.join('ref_files', "muscle_4me3_hg19.bed.gz")
-		r = requests.get(url_4me3, allow_redirects=True)
-		open(out_path_4me3, 'wb').write(r.content)
-		url_27ac = "https://www.encodeproject.org/files/ENCFF563PBB/@@download/ENCFF563PBB.bed.gz"
-		out_path_27ac = os.path.join('ref_files', "muscle_27ac_hg19.bed.gz")
-		r = requests.get(url_27ac, allow_redirects=True)
-		open(out_path_27ac, 'wb').write(r.content)
-		url_27me3 = "https://www.encodeproject.org/files/ENCFF191PRP/@@download/ENCFF191PRP.bed.gz"
-		out_path_27me3 = os.path.join('ref_files', "muscle_27me3_hg19.bed.gz")
-		r = requests.get(url_27me3, allow_redirects=True)
-		open(out_path_27me3, 'wb').write(r.content)
-		
 	#Neuron (Homo sapiens SK-N-SH)
 	elif args.tissue.lower() == "neuron":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF580GTZ/@@download/ENCFF580GTZ.bed.gz"
@@ -956,6 +937,25 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF318QJC/@@download/ENCFF318QJC.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "prostate_27me3_hg19.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+		
+	#Skeletal muscle (Homo sapiens muscle of leg tissue female embryo (110 days))
+	elif args.tissue.lower() == "skeletal_muscle":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF746HHI/@@download/ENCFF746HHI.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "muscle_4me1_hg19.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF027HBT/@@download/ENCFF027HBT.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "muscle_4me3_hg19.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF563PBB/@@download/ENCFF563PBB.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "muscle_27ac_hg19.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF191PRP/@@download/ENCFF191PRP.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "muscle_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
