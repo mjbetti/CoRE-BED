@@ -21,8 +21,8 @@ assert args.input, "Must specify input file (-i, --input)"
 assert args.ref_genome, "Must specify reference genome build (-g, --ref_genome)"
 assert args.tissue, "Must specify tissue type (-t, --tissue)"
 
-#Check that specified tissue type is one of the 10 valid options
-assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina", "Tissue type must be one of the 26 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)"
+#Check that specified tissue type is one of the 28 valid options
+assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "stomach" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina", "Tissue type must be one of the 28 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 if args.verbose:
@@ -475,6 +475,25 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF159IED/@@download/ENCFF159IED.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "spleen_27me3_hg38.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+		
+	#Stomach (Homo sapiens stomach tissue male adult (37 years))
+	elif args.tissue.lower() == "stomach":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF475EJU/@@download/ENCFF475EJU.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "stomach_4me1_hg38.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF494BWU/@@download/ENCFF494BWU.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "stomach_4me3_hg38.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF978AOD/@@download/ENCFF978AOD.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "stomach_27ac_hg38.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF692HXY/@@download/ENCFF692HXY.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "stomach_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
@@ -994,6 +1013,25 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF065IBC/@@download/ENCFF065IBC.bed.gz"
 		out_path_27me3 = os.path.join('ref_files', "spleen_27me3_hg19.bed.gz")
+		r = requests.get(url_27me3, allow_redirects=True)
+		open(out_path_27me3, 'wb').write(r.content)
+		
+	#Stomach (Homo sapiens stomach tissue male adult (37 years))
+	elif args.tissue.lower() == "stomach":
+		url_4me1 = "https://www.encodeproject.org/files/ENCFF324NLX/@@download/ENCFF324NLX.bed.gz"
+		out_path_4me1 = os.path.join('ref_files', "stomach_4me1_hg19.bed.gz")
+		r = requests.get(url_4me1, allow_redirects=True)
+		open(out_path_4me1, 'wb').write(r.content)
+		url_4me3 = "https://www.encodeproject.org/files/ENCFF161ERT/@@download/ENCFF161ERT.bed.gz"
+		out_path_4me3 = os.path.join('ref_files', "stomach_4me3_hg19.bed.gz")
+		r = requests.get(url_4me3, allow_redirects=True)
+		open(out_path_4me3, 'wb').write(r.content)
+		url_27ac = "https://www.encodeproject.org/files/ENCFF506AKR/@@download/ENCFF506AKR.bed.gz"
+		out_path_27ac = os.path.join('ref_files', "stomach_27ac_hg19.bed.gz")
+		r = requests.get(url_27ac, allow_redirects=True)
+		open(out_path_27ac, 'wb').write(r.content)
+		url_27me3 = "https://www.encodeproject.org/files/ENCFF435CWM/@@download/ENCFF435CWM.bed.gz"
+		out_path_27me3 = os.path.join('ref_files', "stomach_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
