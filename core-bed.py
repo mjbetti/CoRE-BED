@@ -152,7 +152,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		r = requests.get(url_27ac, allow_redirects=True)
 		open(out_path_27ac, 'wb').write(r.content)
 		url_27me3 = "https://www.encodeproject.org/files/ENCFF336IXL/@@download/ENCFF336IXL.bed.gz"
-		out_path_27me3 = os.path.join('ref_files', "cultured_fibroblasts_27me3_hg38.bed.gz")
+		out_path_27me3 = os.path.join('ref_files', "cultured_fibroblast_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
 		
@@ -658,7 +658,7 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		open(out_path_27me3, 'wb').write(r.content)
 		
 	#Cultured fibroblast (Homo sapiens IMR-90)
-	elif args.tissue.lower() == "cultured_fibroblasts":
+	elif args.tissue.lower() == "cultured_fibroblast":
 		url_4me1 = "https://www.encodeproject.org/files/ENCFF830JTY/@@download/ENCFF830JTY.bed.gz"
 		out_path_4me1 = os.path.join('ref_files', "cultured_fibroblast_4me1_hg19.bed.gz")
 		r = requests.get(url_4me1, allow_redirects=True)
