@@ -11,9 +11,10 @@ import os, sys, requests, argparse, pybedtools, pandas as pd
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Testis, Thyroid, Uterus, Vagina)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina)")
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
+parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
 args = parser.parse_args()
 
 #Check that required arguments are specified
@@ -1178,14 +1179,10 @@ active_poised_primed = active_and_poised + primed_enhancer
 unclassified_no_tss = no_tss.intersect(active_poised_primed, v = True)
 unclassified_no_tss = unclassified_no_tss.sort()
 
-#Print out the number of peaks/coordinates in each category
-if args.verbose:
-	print("Identified regions:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_overlaps_tss_count} regions in an unclassified region within 2 kb of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_no_tss_count} regions in an unclassified region greater than 2 kb from a TSS\n".format(active_promoter_count = active_promoter.count(), bivalent_promoter_count = bivalent_promoter.count(), silenced_promoter_count = silenced_promoter.count(), unclassified_overlaps_tss_count = unclassified_overlaps_tss.count(), active_enhancer_count = active_enhancer.count(), poised_enhancer_count = poised_enhancer.count(), primed_enhancer_count = primed_enhancer.count(), unclassified_no_tss_count = unclassified_no_tss.count()))
-	print("\n")
-
 #If they have one or more coordinate entries, convert each of the classifier variables to a pandas DataFrame object so that we can append the classifications as an additional column
 if args.verbose:
 	print("Preparing output file ({output_file})...".format(output_file = args.output))
+	print("\n")
 
 if active_promoter.count() > 0:
 	active_promoter_df = pybedtools.BedTool.to_dataframe(active_promoter)
@@ -1240,6 +1237,32 @@ all_data_frames = [active_promoter_df, bivalent_promoter_df, silenced_promoter_d
 
 concatenated_df = pd.concat(all_data_frames)
 concatenated_df = concatenated_df.drop_duplicates()
+
+#For rows that are completely identical (all entries except for the regulatory annotation), the rows are collapsed into one, with the multiple annotations concatenated in a comma-separated string)
+n_cols = len(concatenated_df.columns)
+names_array = []
+counter = 1
+for i in range(0, n_cols):
+	colname = "col_" + str(counter)
+	names_array.append(colname)
+	counter += 1
+concatenated_df.columns = names_array
+last_col = names_array[-1]
+concatenated_df[last_col] = concatenated_df.groupby(names_array[0:-1])[last_col].transform(lambda x: ','.join(x))
+concatenated_df = concatenated_df.drop_duplicates()
+
+#If a coordinate overlaps with multiple regulatory elements and the user specifically wishes to keep only one, then we will keep only the most significant (i.e. active_promoter over unclassified_within_2kb_of_tss)
+if args.no_multianno:
+	from operator import itemgetter
+	annotations = concatenated_df.iloc[:,-1]
+	annotations = annotations.str.split(',')
+	firsts = list(map(itemgetter(0), annotations))
+	concatenated_df.drop(concatenated_df.columns[-1], axis = 1, inplace = True)
+	concatenated_df[names_array[-1]] = firsts
+	
+#Print out the number of peaks/coordinates in each category
+if args.verbose:
+	print("Identified regions:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_overlaps_tss_count} regions in an unclassified region within 2 kb of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_no_tss_count} regions in an unclassified region greater than 2 kb from a TSS\n".format(active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_overlaps_tss_count = list(map(lambda x: x.startswith("unclassified_within_2kb_of_tss"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_no_tss_count = list(map(lambda x: x.startswith("unclassified_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True)))
 
 #Convert the concatenated data frame back to pybedtools objects and sort by coordinates
 concatenated_bed = pybedtools.BedTool().from_dataframe(concatenated_df).sort()

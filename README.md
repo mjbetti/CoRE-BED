@@ -58,6 +58,7 @@ Use the ```-h``` or ```--help``` flag to view all available options:
 python core-bed.py -h
 
 usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE [-o OUTPUT] [-v]
+                   [--no_multianno]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -74,11 +75,13 @@ optional arguments:
                         Esophagus_muscularis_mucosa,
                         Esophagus_squamous_epithelium, Heart, Intestine, iPS,
                         Kidney, Liver, Lung, Neuron, Ovary, Pancreas,
-                        Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis,
-                        Thyroid, Uterus, Vagina)
+                        Prostate, Skeletal_muscle, Skin, Spleen, Stomach,
+                        Testis, Thyroid, Uterus, Vagina)
   -o OUTPUT, --output OUTPUT
                         the name of the output file
   -v, --verbose         return logging as terminal output
+  --no_multianno        if a coordinate overlaps with multiple regions, keep
+                        the most significant occurance
 ```
 
 A typical run of the CoRE-BED method would look something like the following:
