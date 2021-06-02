@@ -1,4 +1,4 @@
-###Developed by Michael J Betti, April 2021, updated 14 May 2021
+###Developed by Michael J Betti, April 2021, updated 1 June 2021
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
@@ -12,9 +12,13 @@ parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
 parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina)")
+parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS", default = 2000)
+parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS", default = 2000)
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
-parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
+parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
+parser.add_argument("--input_header", required = False, help = "indicate whether the input file has a header (indicate true or false)", action = "store_true")
+parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 args = parser.parse_args()
 
 #Check that required arguments are specified
@@ -61,6 +65,10 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "adipose_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
+		# url_36me3 = "https://www.encodeproject.org/files/ENCFF075XPG/@@download/ENCFF075XPG.bed.gz"
+# 		out_path_36me3 = os.path.join('ref_files', "adipose_36me3_hg38.bed.gz")
+# 		r = requests.get(url_36me3, allow_redirects=True)
+# 		open(out_path_36me3, 'wb').write(r.content)
 		
 	#Adrenal gland (Homo sapiens adrenal gland tissue male embryo (97 days))
 	if args.tissue.lower() == "adrenal_gland":
@@ -80,6 +88,10 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		out_path_27me3 = os.path.join('ref_files', "adrenal_gland_27me3_hg38.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
+		# url_36me3 = "https://www.encodeproject.org/files/ENCFF885UJE/@@download/ENCFF885UJE.bed.gz"
+# 		out_path_36me3 = os.path.join('ref_files', "adrenal_gland_36me3_hg38.bed.gz")
+# 		r = requests.get(url_36me3, allow_redirects=True)
+# 		open(out_path_36me3, 'wb').write(r.content)
 		
 	#Artery (Homo sapiens aorta tissue male adult (34 years))
 	if args.tissue.lower() == "artery":
@@ -600,6 +612,10 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		out_path_27me3 = os.path.join('ref_files', "adipose_27me3_hg19.bed.gz")
 		r = requests.get(url_27me3, allow_redirects=True)
 		open(out_path_27me3, 'wb').write(r.content)
+		# url_36me3 = "https://www.encodeproject.org/files/ENCFF553JCE/@@download/ENCFF553JCE.bed.gz"
+# 		out_path_36me3 = os.path.join('ref_files', "adipose_36me3_hg19.bed.gz")
+# 		r = requests.get(url_36me3, allow_redirects=True)
+# 		open(out_path_36me3, 'wb').write(r.content)
 		
 	#Adrenal gland (Homo sapiens adrenal gland tissue male embryo (97 days))
 	if args.tissue.lower() == "adrenal_gland":
@@ -1126,18 +1142,35 @@ if args.verbose:
 	print("\n")
 
 bed_tss_orig = pd.read_csv(bed_tss_path, sep = "\t", header = None)
-bed_tss_orig.iloc[:,1] = bed_tss_orig.iloc[:,1] - 2000
-bed_tss_orig.iloc[:,2] = bed_tss_orig.iloc[:,2] + 2000
+bed_tss_orig.iloc[:,1] = bed_tss_orig.iloc[:,1] - args.tss_distance_upstream
+bed_tss_orig.iloc[:,2] = bed_tss_orig.iloc[:,2] + args.tss_distance_downstream
 bed_tss_orig = bed_tss_orig[bed_tss_orig.iloc[:,1] >= 0]
 bed_tss = pybedtools.BedTool().from_dataframe(bed_tss_orig)
 
 #Import the input bed, along with the histone ChIP-seq bed files
-bed_input = pybedtools.BedTool(args.input)
+##Because the raw input file will not necessarily be in UCSC BED format, first import it as a pandas data frame, sort by coordinates, and then input coordinates as a pybedtools object
+if args.input_header:
+	file_input = pd.read_csv(args.input, delim_whitespace = True)
+else:
+	file_input = pd.read_csv(args.input, delim_whitespace = True, header = None)
+	
+cols_array = args.bed_cols.split(",")
+chr_col = int(cols_array[0]) - 1
+start_col = int(cols_array[1]) - 1
+end_col = int(cols_array[2]) - 1
+
+col_names = file_input.columns
+file_input.sort_values(by = [col_names[chr_col], col_names[start_col], col_names[end_col]])
+
+##Sort the input file by coordinates
+bed_input = file_input[[col_names[chr_col], col_names[start_col], col_names[end_col]]]
+if str(bed_input.iloc[:,0]).startswith("chr") == False:
+	bed_input.iloc[:,0] = "chr" + bed_input.iloc[:,0].astype(str)
+bed_input = pybedtools.BedTool.from_dataframe(bed_input)
 bed_4me1 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me1_" + bed_ref + ".bed.gz")
 bed_4me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me3_" + bed_ref + ".bed.gz")
 bed_27ac = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27ac_" + bed_ref + ".bed.gz")
 bed_27me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27me3_" + bed_ref + ".bed.gz")
-
 
 ###Compare the input file to the reference bed files, starting with the modified TSS bed
 ##Do the peaks fall within 2 kb of a TSS?
@@ -1232,11 +1265,15 @@ if unclassified_no_tss.count() > 0:
 else:
 	unclassified_no_tss_df = pd.DataFrame()
 	
-#Concatenate all of the pandas DataFrame objects into one and remove all duplicate lines
+#Concatenate all of the pandas DataFrame objects into one, remove all duplicate lines, and sort by coordinate
 all_data_frames = [active_promoter_df, bivalent_promoter_df, silenced_promoter_df, unclassified_overlaps_tss_df, active_enhancer_df, poised_enhancer_df, primed_enhancer_df, unclassified_no_tss_df]
 
 concatenated_df = pd.concat(all_data_frames)
 concatenated_df = concatenated_df.drop_duplicates()
+concatenated_df.iloc[:,0] = concatenated_df.iloc[:,0].str[3:]
+col_names = ["chr", "start", "end", "func_anno"]
+concatenated_df.columns = col_names
+concatenated_df = concatenated_df.sort_values(by = [col_names[0], col_names[1], col_names[2]])
 
 #For rows that are completely identical (all entries except for the regulatory annotation), the rows are collapsed into one, with the multiple annotations concatenated in a comma-separated string)
 n_cols = len(concatenated_df.columns)
@@ -1264,6 +1301,13 @@ if args.no_multianno:
 if args.verbose:
 	print("Identified regions:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_overlaps_tss_count} regions in an unclassified region within 2 kb of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_no_tss_count} regions in an unclassified region greater than 2 kb from a TSS\n".format(active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_overlaps_tss_count = list(map(lambda x: x.startswith("unclassified_within_2kb_of_tss"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_no_tss_count = list(map(lambda x: x.startswith("unclassified_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True)))
 
-#Convert the concatenated data frame back to pybedtools objects and sort by coordinates
-concatenated_bed = pybedtools.BedTool().from_dataframe(concatenated_df).sort()
-concatenated_bed.saveas(args.output)
+#Append the functional annotations onto the original input
+annotations = concatenated_df.iloc[:,-1]
+annotations = annotations.reset_index(drop = True)
+file_input = file_input.reset_index(drop = True)
+file_input["func_anno"] = annotations
+
+if args.input_header:
+	file_input.to_csv(args.output, sep = "\t", index = False)
+else:
+	file_input.to_csv(args.output, sep = "\t", header = False, index = False)
