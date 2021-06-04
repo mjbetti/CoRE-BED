@@ -212,7 +212,7 @@ The desired name of the output file (default is ```out.bed```)
 * ```-v``` or ```--verbose```\
 Enable verbosity (i.e. print the script progress out to the console)
 * ```--no_multianno```\
-If a coordinate overlaps with multiple regions, keep the most significant occurance (i.e. If a coordinate overlaps with both an active promoter and unclassified inactive chromatin within_2kb_of_tss, only the active promoter will be retained in the final annotation set.)
+If a coordinate overlaps with multiple regions, keep the most significant occurance (i.e. If a coordinate overlaps with both an active promoter and unclassified inactive chromatin region within 2 kb of a TSS, only the active promoter will be retained in the final annotation set.)
 * ```--bed_cols```\
 The columns of the input file (1-indexed) containing the chr, start coordinate, and end coordinate. For files containing only a single variant coordinate (common for GWAS summary statistics), specify this same column for both the start and end coordinate.
 * ```--input_header```\
