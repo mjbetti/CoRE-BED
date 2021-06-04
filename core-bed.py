@@ -11,13 +11,19 @@ import os, sys, requests, argparse, pybedtools, pandas as pd
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, User_provided_urls)")
 parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS", default = 2000)
 parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS", default = 2000)
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
 parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
 parser.add_argument("--input_header", required = False, help = "indicate whether the input file has a header (indicate true or false)", action = "store_true")
+parser.add_argument("--user_4me1", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K4me1 ChIP-seq peaks")
+parser.add_argument("--user_4me3", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K4me3 ChIP-seq peaks")
+parser.add_argument("--user_27ac", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K27ac ChIP-seq peaks")
+parser.add_argument("--user_27me3", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K27me3 ChIP-seq peaks")
+parser.add_argument("--user_36me3", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K36me3 ChIP-seq peaks")
+parser.add_argument("--user_dnase", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided DNase-seq peaks")
 parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
 args = parser.parse_args()
 
@@ -25,9 +31,11 @@ args = parser.parse_args()
 assert args.input, "Must specify input file (-i, --input)"
 assert args.ref_genome, "Must specify reference genome build (-g, --ref_genome)"
 assert args.tissue, "Must specify tissue type (-t, --tissue)"
+if args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls":
+	assert args.user_4me1 and args.user_4me3 and args.user_27ac and args.user_27me3 and args.user_36me3 and args.user_dnase, "Must provide histone ChIP-seq and DNase-seq files when using the User_provided_files tissue option or URLs when using the User_provided_urls option"
 
-#Check that specified tissue type is one of the 28 valid options
-assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "stomach" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina", "Tissue type must be one of the 28 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina)"
+#Check that specified tissue type is one of the 30 valid options
+assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "stomach" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina" or args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls", "Tissue type must be one of the 30 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, or User_provided_urls)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 def download_ref(url_ref, out_name):
@@ -300,6 +308,15 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 		download_ref("https://www.encodeproject.org/files/ENCFF866QFX/@@download/ENCFF866QFX.bed.gz", "vagina_27me3_hg38.bed.gz")
 		download_ref("https://www.encodeproject.org/files/ENCFF823VSG/@@download/ENCFF823VSG.bed.gz", "vagina_36me3_hg38.bed.gz")
 		download_ref("https://www.encodeproject.org/files/ENCFF872AJU/@@download/ENCFF872AJU.bed.gz", "vagina_dnase_hg38.bed.gz")
+		
+		#User-provided URLs
+	elif args.tissue.lower() == "user_provided_urls":
+		download_ref(args.user_4me1, "user_provided_urls_4me1_hg38.bed.gz")
+		download_ref(args.user_4me3, "user_provided_urls_4me3_hg38.bed.gz")
+		download_ref(args.user_27ac, "user_provided_urls_27ac_hg38.bed.gz")
+		download_ref(args.user_27me3, "user_provided_urls_27me3_hg38.bed.gz")
+		download_ref(args.user_36me3, "user_provided_urls_36me3_hg38.bed.gz")
+		download_ref(args.user_dnase, "user_provided_urls_dnase_hg38.bed.gz")
 
 ###################################################################################
 #GRCh37/hg19
@@ -557,6 +574,15 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		download_ref("https://www.encodeproject.org/files/ENCFF993WTL/@@download/ENCFF993WTL.bed.gz", "vagina_27me3_hg19.bed.gz")
 		download_ref("https://www.encodeproject.org/files/ENCFF643BMR/@@download/ENCFF643BMR.bed.gz", "vagina_36me3_hg19.bed.gz")
 		download_ref("https://www.encodeproject.org/files/ENCFF600WRF/@@download/ENCFF600WRF.bed.gz", "vagina_dnase_hg19.bed.gz")
+		
+	#User-provided URLs
+	elif args.tissue.lower() == "user_provided_urls":
+		download_ref(args.user_4me1, "user_provided_urls_4me1_hg19.bed.gz")
+		download_ref(args.user_4me3, "user_provided_urls_4me3_hg19.bed.gz")
+		download_ref(args.user_27ac, "user_provided_urls_27ac_hg19.bed.gz")
+		download_ref(args.user_27me3, "user_provided_urls_27me3_hg19.bed.gz")
+		download_ref(args.user_36me3, "user_provided_urls_36me3_hg19.bed.gz")
+		download_ref(args.user_dnase, "user_provided_urls_dnase_hg19.bed.gz")
 	
 ###Import all of the bed files to be worked on (input and histone mark ChIP-seq) using pybedtools
 if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
@@ -597,12 +623,21 @@ bed_input = file_input[[col_names[chr_col], col_names[start_col], col_names[end_
 if str(bed_input.iloc[:,0]).startswith("chr") == False:
 	bed_input.iloc[:,0] = "chr" + bed_input.iloc[:,0].astype(str)
 bed_input = pybedtools.BedTool.from_dataframe(bed_input)
-bed_4me1 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me1_" + bed_ref + ".bed.gz")
-bed_4me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me3_" + bed_ref + ".bed.gz")
-bed_27ac = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27ac_" + bed_ref + ".bed.gz")
-bed_27me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27me3_" + bed_ref + ".bed.gz")
-bed_36me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_36me3_" + bed_ref + ".bed.gz")
-bed_dnase = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_dnase_" + bed_ref + ".bed.gz")
+
+if args.tissue.lower() == "user_provided_files":
+	bed_4me1 = pybedtools.BedTool(args.user_4me1)
+	bed_4me3 = pybedtools.BedTool(args.user_4me3)
+	bed_27ac = pybedtools.BedTool(args.user_27ac)
+	bed_27me3 = pybedtools.BedTool(args.user_27me3)
+	bed_36me3 = pybedtools.BedTool(args.user_36me3)
+	bed_dnase = pybedtools.BedTool(args.user_dnase)
+else:
+	bed_4me1 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me1_" + bed_ref + ".bed.gz")
+	bed_4me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_4me3_" + bed_ref + ".bed.gz")
+	bed_27ac = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27ac_" + bed_ref + ".bed.gz")
+	bed_27me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_27me3_" + bed_ref + ".bed.gz")
+	bed_36me3 = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_36me3_" + bed_ref + ".bed.gz")
+	bed_dnase = pybedtools.BedTool("ref_files/" + args.tissue.lower() + "_dnase_" + bed_ref + ".bed.gz")
 
 ###Compare the input file to the reference bed files, starting with the modified TSS bed
 ##Do the peaks fall within 2 kb of a TSS?

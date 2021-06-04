@@ -88,7 +88,13 @@ The main script ```core-bed.py``` takes in a user-provided genomic coordinates f
 **hg19**: *Homo sapiens* uterus tissue female adult (51 years) and *Homo sapiens* HeLa-S3 (DNase-seq only)
 * ```Vagina```\
 **hg38**: *Homo sapiens* vagina tissue female adult (51 years)\
-**hg19**: *Homo sapiens* vagina tissue female adult (51 years)
+**hg19**: *Homo sapiens* vagina tissue female adult (51 years)\
+\
+In addition to these 28 provided tissue options, CoRE-BED also allows users to specify any other reference tissue of their choosing via the following additional tissue argument options:
+* ```User_specified_file```\
+Indicates that the user will provide their own H3K4me1, H3K4me3, H3K27ac, H3K27me3, and H3K36me3 histone ChIP-seq, as well as DNase-seq, reference file paths using the ```--user_4me1```, ```--user_4me3```, ```--user_27ac```, ```--user_27me3```, ```--user_36me3```, and ```--user_dnase``` arguments, respectively.
+* ```User_specified_url```\
+Indicates that the user will provide their own H3K4me1, H3K4me3, H3K27ac, H3K27me3, and H3K36me3 histone ChIP-seq, as well as DNase-seq, URLs of reference files to be downloaded using the ```--user_4me1```, ```--user_4me3```, ```--user_27ac```, ```--user_27me3```, ```--user_36me3```, and ```--user_dnase``` arguments, respectively.
 
 Upon preparation of all reference files, the BED containing transcription start sites (TSSs) is modified by subtracting 2 kb from each start coordinate and adding 2 kb to each end coordinate. The script then uses these modified TSS coordinates to determine whether each input coordinate overlaps with a genomic interval within 2 kb of a TSS. Those input coordinates that do have overlap are considered "candidate promoters" and those that do not are considered "candidate enhancers."
 
@@ -116,8 +122,13 @@ Use the ```-h``` or ```--help``` flag to view all available options:
 ```
 python core-bed.py -h
 
-usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE [-o OUTPUT] [-v]
-                   [--no_multianno]
+usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE
+                   [-ud TSS_DISTANCE_UPSTREAM] [-dd TSS_DISTANCE_DOWNSTREAM]
+                   [-o OUTPUT] [--no_multianno] [--bed_cols BED_COLS]
+                   [--input_header] [--user_4me1 USER_4ME1]
+                   [--user_4me3 USER_4ME3] [--user_27ac USER_27AC]
+                   [--user_27me3 USER_27ME3] [--user_36me3 USER_36ME3]
+                   [--user_dnase USER_DNASE] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -135,31 +146,79 @@ optional arguments:
                         Esophagus_squamous_epithelium, Heart, Intestine, iPS,
                         Kidney, Liver, Lung, Neuron, Ovary, Pancreas,
                         Prostate, Skeletal_muscle, Skin, Spleen, Stomach,
-                        Testis, Thyroid, Uterus, Vagina)
+                        Testis, Thyroid, Uterus, Vagina, User_provided_files,
+                        User_provided_urls)
+  -ud TSS_DISTANCE_UPSTREAM, --tss_distance_upstream TSS_DISTANCE_UPSTREAM
+                        the upstream boundary distance from a TSS
+  -dd TSS_DISTANCE_DOWNSTREAM, --tss_distance_downstream TSS_DISTANCE_DOWNSTREAM
+                        the downstream boundary distance from a TSS
   -o OUTPUT, --output OUTPUT
                         the name of the output file
-  -v, --verbose         return logging as terminal output
   --no_multianno        if a coordinate overlaps with multiple regions, keep
                         the most significant occurance
+  --bed_cols BED_COLS   if the input is not in traditional UCSC BED format,
+                        specify the column numbers of chr, start, and end
+                        separated by commas
+  --input_header        indicate whether the input file has a header (indicate
+                        true or false)
+  --user_4me1 USER_4ME1
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided H3K4me1 ChIP-seq peaks
+  --user_4me3 USER_4ME3
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided H3K4me3 ChIP-seq peaks
+  --user_27ac USER_27AC
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided H3K27ac ChIP-seq peaks
+  --user_27me3 USER_27ME3
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided H3K27me3 ChIP-seq peaks
+  --user_36me3 USER_36ME3
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided H3K36me3 ChIP-seq peaks
+  --user_dnase USER_DNASE
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify either the path or
+                        URL of the user-provided DNase-seq peaks
+  -v, --verbose         return logging as terminal output
 ```
 
-A typical run of the CoRE-BED method would look something like the following:
+A run of the CoRE-BED method to annotate a set of GWAS summary statistics would look something like the following:
 ```
 python core-bed.py \
--i input_file_based_on_hg38.bed \
+-i input_gwas_summary_stats_based_on_hg38.txt \
 -g hg38 \
 -t blood \
--o annotated_input_coordinates.bed \
--v
+-o annotated_input_gwas_summary_stats_based_on_hg38.txt \
+-v \
+--no_multianno \
+--bed_cols 3,4,4 \
+--input_header
 ```
 ...with each of the user-specified arguments specifying:
-* ```-i``` or ```--input``` - A set of genomic coordinates in UCSC BED format (https://genome.ucsc.edu/FAQ/FAQformat.html)
-* ```-g``` or ```--ref_genome``` - The reference genome build on which the input coordinates are based
-* ```-t``` or ```--tissue``` - The tissue type to which the input coordinates will be compared
-* ```-o``` or ```--output``` - The desired name of the output file (default is ```out.bed```)
-* ```-v``` or ```--verbose``` - Enable verbosity (i.e. print the script progress out to the console)
-
-The final output file will be a new BED file, in which the input coordinates are annotated based on how the genomic region in which they fall was classified. The BED will consist of three data columns: chr, start, end, and annotation.
+* ```-i``` or ```--input```\
+A set of genomic coordinates in UCSC BED format (https://genome.ucsc.edu/FAQ/FAQformat.html)
+* ```-g``` or ```--ref_genome```\
+The reference genome build on which the input coordinates are based
+* ```-t``` or ```--tissue```\
+The tissue type to which the input coordinates will be compared
+* ```-o``` or ```--output```\
+The desired name of the output file (default is ```out.bed```)
+* ```-v``` or ```--verbose```\
+Enable verbosity (i.e. print the script progress out to the console)
+* ```--no_multianno```\
+If a coordinate overlaps with multiple regions, keep the most significant occurance (i.e. If a coordinate overlaps with both an active promoter and unclassified inactive chromatin within_2kb_of_tss, only the active promoter will be retained in the final annotation set.)
+* ```--bed_cols```\
+The columns of the input file (1-indexed) containing the chr, start coordinate, and end coordinate. For files containing only a single variant coordinate (common for GWAS summary statistics), specify this same column for both the start and end coordinate.
+* ```--input_header```\
+Specifies that the input file does have a header\
+\
+The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.
 
 ## References
 Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424.
