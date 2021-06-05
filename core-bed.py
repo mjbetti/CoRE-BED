@@ -834,7 +834,7 @@ if args.verbose:
 annotations = concatenated_df.iloc[:,-1]
 annotations = annotations.reset_index(drop = True)
 file_input = file_input.reset_index(drop = True)
-file_input["functional_annotation"] = annotations
+file_input["FUNCTIONAL_ANNOTATION"] = annotations
 
 if args.input_header:
 	file_input.to_csv(args.output, sep = "\t", index = False)
