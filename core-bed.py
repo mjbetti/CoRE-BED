@@ -606,9 +606,9 @@ bed_tss = pybedtools.BedTool().from_dataframe(bed_tss_orig)
 #Import the input bed, along with the histone ChIP-seq bed files
 ##Because the raw input file will not necessarily be in UCSC BED format, first import it as a pandas data frame, sort by coordinates, and then input coordinates as a pybedtools object
 if args.input_header:
-	file_input = pd.read_csv(args.input, delim_whitespace = True)
+	file_input = pd.read_csv(args.input, delim_whitespace = True, low_memory = False)
 else:
-	file_input = pd.read_csv(args.input, delim_whitespace = True, header = None)
+	file_input = pd.read_csv(args.input, delim_whitespace = True, header = None, low_memory = False)
 	
 cols_array = args.bed_cols.split(",")
 chr_col = int(cols_array[0]) - 1
