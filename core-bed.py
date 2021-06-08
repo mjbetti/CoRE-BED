@@ -17,7 +17,7 @@ parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = F
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
 parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
-parser.add_argument("--input_header", required = False, help = "indicate whether the input file has a header (indicate true or false)", action = "store_true")
+parser.add_argument("--input_header", required = False, help = "use if the input file has a header", action = "store_true")
 parser.add_argument("--user_4me1", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K4me1 ChIP-seq peaks")
 parser.add_argument("--user_4me3", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K4me3 ChIP-seq peaks")
 parser.add_argument("--user_27ac", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K27ac ChIP-seq peaks")
