@@ -1,6 +1,6 @@
 # CoRE-BED
 ## Introduction
-CoRE-BED, or Classifier of Regulatory Elements in BED coordinates, is a Python-based tool developed to classify the regulatory identities of regions in any genomic coordinates file. Based on each coordinate's overlap (or lack thereof) with annotated transcription start sites (TSSs); H3K4me1, H3K4me3, H3K27ac, H3K27me3, and H3K36me3 histone marks, as well as DNAse I hypersensitive (DHS) sites, it will be classified as either an active promoter, bivalent promoter, silenced promoter, gene body in an unclassified active chromatin region within 2 kb of a TSS, gene body in an unclassified inactive chromatin region within 2 kb of a TSS, non-gene body in an unclassified active chromatin region within 2 kb of a TSS, non-gene body in an unclassified inactive chromatin region within 2 kb of a TSS, active enhancer, poised enhancer, primed enhancer, gene body in an unclassified active chromatin region beyond 2 kb of a TSS, gene body in an unclassified inactive chromatin region beyond 2 kb of a TSS, non-gene body in an unclassified active chromatin region beyond 2 kb of a TSS, or non-gene body in an unclassified inactive chromatin region beyond 2 kb of a TSS. This classification method can be best visualized as a tree structure:
+CoRE-BED, or Classifier of Regulatory Elements in BED coordinates, is a Python-based tool developed to classify the regulatory identities of regions in any genomic coordinates file. Based on each coordinate's overlap (or lack thereof) with annotated transcription start sites (TSSs); H3K4me1, H3K4me3, H3K27ac, H3K27me3, and H3K36me3 histone marks, as well as DNAse I hypersensitive (DHS) sites, it will be classified as either an active promoter, bivalent promoter, silenced promoter, gene body in an unclassified active chromatin region within the specified range limit of a TSS (default: 2 kb upstream and 2 kb downstream), gene body in an unclassified inactive chromatin region within the specified range limit of a TSS, non-gene body in an unclassified active chromatin region within the specified range limit of a TSS, non-gene body in an unclassified inactive chromatin region within the specified range limit of a TSS, active enhancer, poised enhancer, primed enhancer, gene body in an unclassified active chromatin region beyond the specified range limit of a TSS, gene body in an unclassified inactive chromatin region beyond the specified range limit of a TSS, non-gene body in an unclassified active chromatin region beyond the specified range limit of a TSS, or non-gene body in an unclassified inactive chromatin region beyond the specified range limit of a TSS. This classification method can be best visualized as a tree structure:
 
 <img width="1019" alt="Screen Shot 2021-06-04 at 11 22 23 AM" src="https://user-images.githubusercontent.com/63562495/120833220-262fdf00-c527-11eb-8a39-d2238db37f5b.png">
 
@@ -149,9 +149,9 @@ optional arguments:
                         Testis, Thyroid, Uterus, Vagina, User_provided_files,
                         User_provided_urls)
   -ud TSS_DISTANCE_UPSTREAM, --tss_distance_upstream TSS_DISTANCE_UPSTREAM
-                        the upstream boundary distance from a TSS
+                        the upstream boundary distance from a TSS (default: 2000 bp)
   -dd TSS_DISTANCE_DOWNSTREAM, --tss_distance_downstream TSS_DISTANCE_DOWNSTREAM
-                        the downstream boundary distance from a TSS
+                        the downstream boundary distance from a TSS (default: 2000 bp)
   -o OUTPUT, --output OUTPUT
                         the name of the output file
   --no_multianno        if a coordinate overlaps with multiple regions, keep

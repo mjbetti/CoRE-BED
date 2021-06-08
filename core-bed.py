@@ -1,4 +1,4 @@
-###Developed by Michael J Betti, April 2021, updated 4 June 2021
+###Developed by Michael J Betti, April 2021, updated 8 June 2021
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
@@ -12,8 +12,8 @@ parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
 parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, User_provided_urls)")
-parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS", default = 2000)
-parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS", default = 2000)
+parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
+parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
 parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
@@ -734,25 +734,25 @@ else:
 
 if gene_body_active_within_tss.count() > 0:
 	gene_body_active_within_tss_df = pybedtools.BedTool.to_dataframe(gene_body_active_within_tss)
-	gene_body_active_within_tss_df["region_classification"] = "unclassified_active_chromatin;gene_body;within_2kb_of_tss"
+	gene_body_active_within_tss_df["region_classification"] = ("unclassified_active_chromatin;gene_body;within_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	gene_body_active_within_tss_df = pd.DataFrame()
 
 if gene_body_inactive_within_tss.count() > 0:
 	gene_body_inactive_within_tss_df = pybedtools.BedTool.to_dataframe(gene_body_inactive_within_tss)
-	gene_body_inactive_within_tss_df["region_classification"] = "unclassified_inactive_chromatin;gene_body;within_2kb_of_tss"
+	gene_body_inactive_within_tss_df["region_classification"] = ("unclassified_inactive_chromatin;gene_body;within_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	gene_body_inactive_within_tss_df = pd.DataFrame()
 	
 if no_gene_body_active_within_tss.count() > 0:
 	no_gene_body_active_within_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_active_within_tss)
-	no_gene_body_active_within_tss_df["region_classification"] = "unclassified_active_chromatin_within_2kb_of_tss"
+	no_gene_body_active_within_tss_df["region_classification"] = ("unclassified_active_chromatin_within_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	no_gene_body_active_within_tss_df = pd.DataFrame()
 	
 if no_gene_body_inactive_within_tss.count() > 0:
 	no_gene_body_inactive_within_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_inactive_within_tss)
-	no_gene_body_inactive_within_tss_df["region_classification"] = "unclassified_inactive_chromatin_within_2kb_of_tss"
+	no_gene_body_inactive_within_tss_df["region_classification"] = ("unclassified_inactive_chromatin_within_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 
 if active_enhancer.count() > 0:
 	active_enhancer_df = pybedtools.BedTool.to_dataframe(active_enhancer)
@@ -774,25 +774,25 @@ else:
 
 if gene_body_active_no_tss.count() > 0:
 	gene_body_active_no_tss_df = pybedtools.BedTool.to_dataframe(gene_body_active_no_tss)
-	gene_body_active_no_tss_df["region_classification"] = "unclassified_active_chromatin;gene_body;beyond_2kb_of_tss"
+	gene_body_active_no_tss_df["region_classification"] = ("unclassified_active_chromatin;gene_body;beyond_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	gene_body_active_no_tss_df = pd.DataFrame()
 	
 if gene_body_inactive_no_tss.count() > 0:
 	gene_body_inactive_no_tss_df = pybedtools.BedTool.to_dataframe(gene_body_inactive_no_tss)
-	gene_body_inactive_no_tss_df["region_classification"] = "unclassified_inactive_chromatin;gene_body;beyond_2kb_of_tss"
+	gene_body_inactive_no_tss_df["region_classification"] = ("unclassified_inactive_chromatin;gene_body;beyond_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	gene_body_inactive_no_tss_df = pd.DataFrame()
 	
 if no_gene_body_active_no_tss.count() > 0:
 	no_gene_body_active_no_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_active_no_tss)
-	no_gene_body_active_no_tss_df["region_classification"] = "unclassified_active_chromatin_beyond_2kb_of_tss"
+	no_gene_body_active_no_tss_df["region_classification"] = ("unclassified_active_chromatin_beyond_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 else:
 	no_gene_body_active_no_tss_df = pd.DataFrame()
 	
 if no_gene_body_inactive_no_tss.count() > 0:
 	no_gene_body_inactive_no_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_inactive_no_tss)
-	no_gene_body_inactive_no_tss_df["region_classification"] = "unclassified_inactive_chromatin_beyond_2kb_of_tss"
+	no_gene_body_inactive_no_tss_df["region_classification"] = ("unclassified_inactive_chromatin_beyond_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
 	
 #Concatenate all of the pandas DataFrame objects into one, remove all duplicate lines, and sort by coordinate
 all_data_frames = [active_promoter_df, bivalent_promoter_df, silenced_promoter_df, gene_body_active_within_tss_df, gene_body_inactive_within_tss_df, no_gene_body_active_within_tss_df, no_gene_body_inactive_within_tss_df, active_enhancer_df, poised_enhancer_df, primed_enhancer_df, gene_body_active_no_tss_df, gene_body_inactive_no_tss_df, no_gene_body_active_no_tss_df, no_gene_body_inactive_no_tss_df]
@@ -828,7 +828,7 @@ if args.no_multianno:
 	
 #Print out the number of peaks/coordinates in each category
 if args.verbose:
-	print("Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_active_chromatin_gene_body_within_2kb_of_tss_count} regions in a gene body within an active region of chromatin, within 2 kb of a TSS\n{unclassified_inactive_chromatin_gene_body_within_2kb_of_tss_count} regions in a gene body within an inactive region of chromatin, within 2 kb of a TSS\n{unclassified_active_chromatin_within_2kb_of_tss_count} regions within an active region of chromatin (non-gene body), within 2 kb of a TSS\n{unclassified_inactive_chromatin_within_2kb_of_tss_count} regions within an inactive region of chromatin (non-gene body), within 2 kb of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_active_chromatin_gene_body_beyond_2kb_of_tss_count} regions in a gene body within an active region of chromatin, beyond 2 kb from a TSS\n{unclassified_inactive_chromatin_gene_body_beyond_2kb_of_tss_count} regions in a gene body within an inactive region of chromatin, beyond 2 kb from a TSS\n{unclassified_active_chromatin_beyond_2kb_of_tss_count} regions within an active region of chromatin (non-gene body), beyond 2 kb from a TSS\n{unclassified_inactive_chromatin_beyond_2kb_of_tss_count} regions within an inactive region of chromatin (non-gene body), beyond 2 kb from a TSS\n\n".format(specified_tissue_type = args.tissue, active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_gene_body_within_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin;gene_body;within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_gene_body_within_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin;gene_body;within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_within_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin_within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_within_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin_within_2kb_of_tss"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_gene_body_beyond_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin;gene_body;beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_gene_body_beyond_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin;gene_body;beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_beyond_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_beyond_2kb_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True)))
+	print("Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_active_chromatin_gene_body_within_range_of_tss_count} regions in a gene body within an active region of chromatin, within " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_inactive_chromatin_gene_body_within_range_of_tss_count} regions in a gene body within an inactive region of chromatin, within " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_active_chromatin_within_range_of_tss_count} regions within an active region of chromatin (non-gene body), within " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_inactive_chromatin_within_range_of_tss_count} regions within an inactive region of chromatin (non-gene body), within " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n\n" + "Putative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_active_chromatin_gene_body_beyond_range_of_tss_count} regions in a gene body within an active region of chromatin, beyond " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_inactive_chromatin_gene_body_beyond_range_of_tss_count} regions in a gene body within an inactive region of chromatin, beyond " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_active_chromatin_beyond_range_of_tss_count} regions within an active region of chromatin (non-gene body), beyond " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n" + "{unclassified_inactive_chromatin_beyond_range_of_tss_count} regions within an inactive region of chromatin (non-gene body), beyond " + str(args.tss_distance_upstream) + " bp upstream or " + str(args.tss_distance_downstream) + " bp downstream of a TSS\n".format(specified_tissue_type = args.tissue, active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_gene_body_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin;gene_body;within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_gene_body_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin;gene_body;within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin_within_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin_within_2kb_of_tss"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_gene_body_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin;gene_body;beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_gene_body_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin;gene_body;beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_active_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_active_chromatin_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True), unclassified_inactive_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_inactive_chromatin_beyond_2kb_of_tss"), concatenated_df[last_col])).count(True)))
 
 #Append the functional annotations onto the original input
 annotations = concatenated_df.iloc[:,-1]
