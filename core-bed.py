@@ -753,6 +753,8 @@ else:
 if no_gene_body_inactive_within_tss.count() > 0:
 	no_gene_body_inactive_within_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_inactive_within_tss)
 	no_gene_body_inactive_within_tss_df["region_classification"] = ("unclassified_inactive_chromatin_within_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
+else:
+	no_gene_body_inactive_within_tss_df = pd.DataFrame()
 
 if active_enhancer.count() > 0:
 	active_enhancer_df = pybedtools.BedTool.to_dataframe(active_enhancer)
@@ -793,6 +795,8 @@ else:
 if no_gene_body_inactive_no_tss.count() > 0:
 	no_gene_body_inactive_no_tss_df = pybedtools.BedTool.to_dataframe(no_gene_body_inactive_no_tss)
 	no_gene_body_inactive_no_tss_df["region_classification"] = ("unclassified_inactive_chromatin_beyond_" + str(args.tss_distance_upstream) + "_bp_upstream_" + str(args.tss_distance_downstream) + "_bp_downstream_of_tss")
+else:
+	no_gene_body_inactive_no_tss_df = pd.DataFrame()
 	
 #Concatenate all of the pandas DataFrame objects into one, remove all duplicate lines, and sort by coordinate
 all_data_frames = [active_promoter_df, bivalent_promoter_df, silenced_promoter_df, gene_body_active_within_tss_df, gene_body_inactive_within_tss_df, no_gene_body_active_within_tss_df, no_gene_body_inactive_within_tss_df, active_enhancer_df, poised_enhancer_df, primed_enhancer_df, gene_body_active_no_tss_df, gene_body_inactive_no_tss_df, no_gene_body_active_no_tss_df, no_gene_body_inactive_no_tss_df]
