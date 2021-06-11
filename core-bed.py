@@ -1,4 +1,4 @@
-###Developed by Michael J Betti, April 2021, updated 8 June 2021
+###Developed by Michael J Betti, April 2021, updated 11 June 2021
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
@@ -10,8 +10,8 @@ import os, sys, requests, argparse, pybedtools, pandas as pd
 
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
-parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38 and GRCh37/hg19)")
-parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, User_provided_urls)")
+parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human or mouse reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38, GRCh37/hg19, GRCm39/mm39, GRCm38/mm10, or GRCm37/mm9)")
+parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid human options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, User_provided_urls; valid mouse options: User_provided_files, User_provided_urls)")
 parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
 parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
@@ -34,8 +34,12 @@ assert args.tissue, "Must specify tissue type (-t, --tissue)"
 if args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls":
 	assert args.user_4me1 and args.user_4me3 and args.user_27ac and args.user_27me3 and args.user_36me3 and args.user_dnase, "Must provide histone ChIP-seq and DNase-seq files when using the User_provided_files tissue option or URLs when using the User_provided_urls option"
 
-#Check that specified tissue type is one of the 30 valid options
-assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "stomach" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina" or args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls", "Tissue type must be one of the 30 valid options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, or User_provided_urls)"
+#If the reference genome is human, check that specified tissue type is one of the 30 valid options
+if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38" or args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
+	assert args.tissue.lower() == "adipose" or args.tissue.lower() == "adrenal_gland" or args.tissue.lower() == "artery" or args.tissue.lower() == "blood" or args.tissue.lower() == "breast" or args.tissue.lower() == "cultured_fibroblast" or args.tissue.lower() == "ebv_transformed_lymphocyte" or args.tissue.lower() == "es" or args.tissue.lower() == "esophagus_muscularis_mucosa" or args.tissue.lower() == "esophagus_squamous_epithelium" or args.tissue.lower() == "heart" or args.tissue.lower() == "intestine" or args.tissue.lower() == "ips" or args.tissue.lower() == "kidney" or args.tissue.lower() == "liver" or args.tissue.lower() == "lung" or args.tissue.lower() == "neuron" or args.tissue.lower() == "ovary" or args.tissue.lower() == "pancreas" or args.tissue.lower() == "prostate" or args.tissue.lower() == "skeletal_muscle" or args.tissue.lower() == "skin" or args.tissue.lower() == "spleen" or args.tissue.lower() == "stomach" or args.tissue.lower() == "testis" or args.tissue.lower() == "thyroid" or args.tissue.lower() == "uterus" or args.tissue.lower() == "vagina" or args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls", "Tissue type must be one of the 30 valid human options (Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, User_provided_files, or User_provided_urls)"
+	
+elif args.ref_genome.lower() == "mm39" or args.ref_genome.lower() == "grcm39" or args.ref_genome.lower() == "mm10" or args.ref_genome.lower() == "grcm38" or args.ref_genome.lower() == "mm9" or args.ref_genome.lower() == "grcm37":
+	assert args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls", "Tissue type must be one of the 2 valid mouse options (User_provided_files or User_provided_urls)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
 def download_ref(url_ref, out_name):
@@ -53,6 +57,7 @@ if args.verbose:
 	print("Downloading {ref_genome} TSS coordinates and {tissue_type} histone ChIP-seq bed files...".format(ref_genome = args.ref_genome, tissue_type = args.tissue))
 	print("\n")
 
+###Human###
 #GRCh38/hg38
 if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 	download_ref("http://reftss.clst.riken.jp/datafiles/3.1/human/refTSS_v3.1_human_coordinate.hg38.bed.gz", "refTSS_v3.1_human_coordinate.hg38.bed.gz")
@@ -320,8 +325,7 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 
 ###################################################################################
 #GRCh37/hg19
-elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
-	download_ref("https://raw.githubusercontent.com/Shicheng-Guo/AnnotationDatabase/master/hg19/refGene_hg19_TSS.bed", "refGene_hg19_TSS.bed")
+#This TSS dataset was manually lifted over from the original hg38 refTSS dataset and is imported from the CoRE-BED repository
 	
 	#Adipose (Homo sapiens subcutaneous abdominal adipose tissue tissue nuclear fraction female adult (49 years) and Homo sapiens omental fat pad tissue female adult (53 years) (DNase-seq only))
 	if args.tissue.lower() == "adipose":
@@ -583,14 +587,40 @@ elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 		download_ref(args.user_27me3, "user_provided_urls_27me3_hg19.bed.gz")
 		download_ref(args.user_36me3, "user_provided_urls_36me3_hg19.bed.gz")
 		download_ref(args.user_dnase, "user_provided_urls_dnase_hg19.bed.gz")
+		
+###Mouse###
+#GRCm39/mm39
+#This TSS dataset was manually lifted over from the original mm10 refTSS dataset and is imported from the CoRE-BED repository
+
+#GRCm38/mm10
+elif args.ref_genome.lower() == "mm10" or args.ref_genome.lower() == "grcm38":
+	download_ref("http://reftss.clst.riken.jp/datafiles/current/mouse/refTSS_v3.1_mouse_coordinate.mm10.bed.gz", "refTSS_v3.1_mouse_coordinate.hg38.bed.gz")
+	
+#GRCm37/mm9
+#This TSS dataset was manually lifted over from the original mm10 refTSS dataset and is imported from the CoRE-BED repository
 	
 ###Import all of the bed files to be worked on (input and histone mark ChIP-seq) using pybedtools
+##Human
 if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 	bed_ref = "hg38"
 	bed_tss_path = "ref_files/refTSS_v3.1_human_coordinate.hg38.bed.gz"
 elif args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 	bed_ref = "hg19"
-	bed_tss_path = "ref_files/refGene_hg19_TSS.bed"
+	script_dir = os.path.dirname(os.path.realpath(__file__))
+	bed_tss_path = script_dir + "/" + "lifted_reftss_files/" + "refTSS_v3.1_human_coordinate.lifted.sorted.hg19.bed.gz"
+
+##Mouse
+if args.ref_genome.lower() == "mm39" or args.ref_genome.lower() == "grcm39":
+	bed_ref = "mm39"
+	script_dir = os.path.dirname(os.path.realpath(__file__))
+	bed_tss_path = script_dir + "/" + "lifted_reftss_files/" + "refTSS_v3.1_mouse_coordinate.lifted.sorted.mm39.bed.gz"
+elif args.ref_genome.lower() == "mm10" or args.ref_genome.lower() == "grcm38":
+	bed_ref = "mm10"
+	bed_tss_path = "ref_files/refTSS_v3.1_mouse_coordinate.mm10.bed.gz"
+elif args.ref_genome.lower() == "mm9" or args.ref_genome.lower() == "mm9":
+	bed_ref = "mm9"
+	script_dir = os.path.dirname(os.path.realpath(__file__))
+	bed_tss_path = script_dir + "/" + "lifted_reftss_files/" + "refTSS_v3.1_mouse_coordinate.lifted.sorted.mm9.bed.gz"
 
 #Manipulate the TSS bed file so that the coordinates are expanded +-2kb (based on the enrichment we see in Mas et al. 2018 - https://www.nature.com/articles/s41588-018-0218-5?proof=t)
 if args.verbose:
@@ -603,7 +633,7 @@ bed_tss_orig.iloc[:,2] = bed_tss_orig.iloc[:,2] + args.tss_distance_downstream
 bed_tss_orig = bed_tss_orig[bed_tss_orig.iloc[:,1] >= 0]
 bed_tss = pybedtools.BedTool().from_dataframe(bed_tss_orig)
 
-#Import the input bed, along with the histone ChIP-seq bed files
+#Import the input file, along with the histone ChIP-seq bed files
 ##Because the raw input file will not necessarily be in UCSC BED format, first import it as a pandas data frame, sort by coordinates, and then input coordinates as a pybedtools object
 if args.input_header:
 	file_input = pd.read_csv(args.input, delim_whitespace = True, low_memory = False)
