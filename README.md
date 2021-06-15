@@ -128,7 +128,8 @@ usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE
                    [--input_header] [--user_4me1 USER_4ME1]
                    [--user_4me3 USER_4ME3] [--user_27ac USER_27AC]
                    [--user_27me3 USER_27ME3] [--user_36me3 USER_36ME3]
-                   [--user_dnase USER_DNASE] [-v]
+                   [--user_dnase USER_DNASE]
+                   [--user_tissue_names USER_TISSUE_NAMES] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -148,9 +149,9 @@ optional arguments:
                         Esophagus_squamous_epithelium, Heart, Intestine, iPS,
                         Kidney, Liver, Lung, Neuron, Ovary, Pancreas,
                         Prostate, Skeletal_muscle, Skin, Spleen, Stomach,
-                        Testis, Thyroid, Uterus, Vagina, User_provided_files,
-                        User_provided_urls; valid mouse options:
-                        User_provided_files, User_provided_urls)
+                        Testis, Thyroid, Uterus, Vagina, All,
+                        User_provided_files, User_provided_urls; valid mouse
+                        options: User_provided_files, User_provided_urls)
   -ud TSS_DISTANCE_UPSTREAM, --tss_distance_upstream TSS_DISTANCE_UPSTREAM
                         the upstream boundary distance from a TSS (default:
                         2000 bp)
@@ -189,6 +190,10 @@ optional arguments:
                         if the User_provided_files or User_provided_urls
                         tissue option is specified, specify either the path or
                         URL of the user-provided DNase-seq peaks
+  --user_tissue_names USER_TISSUE_NAMES
+                        if the User_provided_files or User_provided_urls
+                        tissue option is specified, specify the names of each
+                        corresponding tissue type
   -v, --verbose         return logging as terminal output
 ```
 
