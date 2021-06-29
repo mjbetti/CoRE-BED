@@ -1,4 +1,4 @@
-###Developed by Michael J Betti, April 2021, updated 14 June 2021
+###Developed by Michael J Betti, April 2021, updated 29 June 2021
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
@@ -512,7 +512,7 @@ if args.ref_genome.lower() == "hg19" or args.ref_genome.lower() == "grch37":
 			download_ref("https://www.encodeproject.org/files/ENCFF631JHU/@@download/ENCFF631JHU.bed.gz", "ips_27ac_hg19.bed.gz")
 			download_ref("https://www.encodeproject.org/files/ENCFF396DQE/@@download/ENCFF396DQE.bed.gz", "ips_27me3_hg19.bed.gz")
 			#download_ref("https://www.encodeproject.org/files/ENCFF510FJC/@@download/ENCFF510FJC.bed.gz", "ips_36me3_hg19.bed.gz")
-			download_ref("https://www.encodeproject.org/files/ENCFF760HUV/@@download/ENCFF760HUV.bed.gz", "ips_dnase_hg38.bed.gz")
+			download_ref("https://www.encodeproject.org/files/ENCFF760HUV/@@download/ENCFF760HUV.bed.gz", "ips_dnase_hg19.bed.gz")
 			download_ref("https://www.encodeproject.org/files/ENCFF779LNR/@@download/ENCFF779LNR.bed.gz", "ips_dnase_hg19.bed.gz")
 		
 		#Kidney (Homo sapiens kidney tissue male adult (67 years), Homo sapiens kidney tissue female embryo (120 days) for H3K27me3 - only dataset for kidney and DNase-seq, and Homo sapiens kidney epithelial cell (CTCF ChIP-seq))
