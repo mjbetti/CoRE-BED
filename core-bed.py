@@ -81,7 +81,8 @@ if args.verbose:
 ###Human###
 #GRCh38/hg38
 if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
-	download_ref("http://reftss.clst.riken.jp/datafiles/3.1/human/refTSS_v3.1_human_coordinate.hg38.bed.gz", "refTSS_v3.1_human_coordinate.hg38.bed.gz")
+	if not os.path.exists("ref_files/refTSS_v3.1_human_coordinate.hg38.bed.gz"):
+		download_ref("http://reftss.clst.riken.jp/datafiles/3.1/human/refTSS_v3.1_human_coordinate.hg38.bed.gz", "refTSS_v3.1_human_coordinate.hg38.bed.gz")
 	
 	for tissue in tissue_array:
 		#Adipose (Homo sapiens subcutaneous abdominal adipose tissue tissue nuclear fraction female adult (49 years), Homo sapiens omental fat pad tissue female adult (51 years) (DNase-seq and CTCF ChIP-seq only))
@@ -702,7 +703,8 @@ elif args.ref_genome.lower() == "mm39" or args.ref_genome.lower() == "grcm39":
 
 #GRCm38/mm10
 elif args.ref_genome.lower() == "mm10" or args.ref_genome.lower() == "grcm38":
-	download_ref("http://reftss.clst.riken.jp/datafiles/current/mouse/refTSS_v3.1_mouse_coordinate.mm10.bed.gz", "refTSS_v3.1_mouse_coordinate.hg38.bed.gz")
+	if not os.path.exists("ref_files/refTSS_v3.1_mouse_coordinate.mm10.bed.gz"):
+		download_ref("http://reftss.clst.riken.jp/datafiles/current/mouse/refTSS_v3.1_mouse_coordinate.mm10.bed.gz", "refTSS_v3.1_mouse_coordinate.mm10.bed.gz")
 	for tissue in tissue_array:
 		#User-provided files
 		if tissue == "user_provided_files":
