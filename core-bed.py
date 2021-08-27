@@ -1,4 +1,4 @@
-###Developed by Michael J Betti, April 2021, updated 2 July 2021
+###Developed by Michael J Betti, April 2021, updated 27 August 2021
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
@@ -832,69 +832,81 @@ for tissue in tissue_array:
 
 	###Compare the input file to the reference bed files, starting with the modified TSS bed
 	##Do the peaks fall within 2 kb of a TSS?
-	overlaps_tss = bed_input.intersect(bed_tss)
+	overlaps_tss = bed_input.intersect(bed_tss, u = True)
+	overlaps_tss = overlaps_tss.sort()
+	#print(overlaps_tss.count())
 	no_tss = bed_input.intersect(bed_tss, v = True)
+	overlaps_tss = overlaps_tss.sort()
+	#print(no_tss.count())
 
 	#Classifying putative promoters
-	overlaps_4me3 = overlaps_tss.intersect(bed_4me3)
+	overlaps_4me3 = overlaps_tss.intersect(bed_4me3, u = True)
+	overlaps_4me3 = overlaps_4me3.sort()
+	#print(overlaps_4me3.count())
 	no_4me3 = overlaps_tss.intersect(bed_4me3, v = True)
-
+	no_4me3 = no_4me3.sort()
+	#print(no_4me3.count())
+	
 	active_promoter = overlaps_4me3.intersect(bed_27me3, v = True)
 	active_promoter = active_promoter.sort()
-
-	bivalent_promoter = overlaps_4me3.intersect(bed_27me3)
+	#print(active_promoter.count())
+ 
+	bivalent_promoter = overlaps_4me3.intersect(bed_27me3, u = True)
 	bivalent_promoter = bivalent_promoter.sort()
-
-	silenced_promoter = no_4me3.intersect(bed_27me3)
+	#print(bivalent_promoter.count())
+ 	
+	silenced_promoter = no_4me3.intersect(bed_27me3, u = True)
 	silenced_promoter = silenced_promoter.sort()
-
-	marked_promoters = active_promoter + bivalent_promoter + silenced_promoter
+	#print(silenced_promoter.count())
 
 	###Further classify unclassified promoter-like regions
-	unclassified_overlaps_tss = overlaps_tss.intersect(marked_promoters, v = True)
-	
-	tss_overlaps_ctcf = unclassified_overlaps_tss.intersect(bed_ctcf)
+	unclassified_overlaps_tss = overlaps_tss.intersect(active_promoter, v = True)
+	unclassified_overlaps_tss = unclassified_overlaps_tss.intersect(bivalent_promoter, v = True)
+	unclassified_overlaps_tss = unclassified_overlaps_tss.intersect(silenced_promoter, v = True)
+	#print(unclassified_overlaps_tss.count())
+	tss_overlaps_ctcf = unclassified_overlaps_tss.intersect(bed_ctcf, u = True)
 	tss_no_ctcf = unclassified_overlaps_tss.intersect(bed_ctcf, v = True)
 
-	ctcf_open_within_tss = tss_overlaps_ctcf.intersect(bed_dnase)
+	ctcf_open_within_tss = tss_overlaps_ctcf.intersect(bed_dnase, u = True)
 	ctcf_open_within_tss = ctcf_open_within_tss.sort()
 
 	ctcf_closed_within_tss = tss_overlaps_ctcf.intersect(bed_dnase, v = True)
 	ctcf_closed_within_tss = ctcf_closed_within_tss.sort()
-
-	no_ctcf_open_within_tss = tss_no_ctcf.intersect(bed_dnase)
+	
+	no_ctcf_open_within_tss = tss_no_ctcf.intersect(bed_dnase, u = True)
 	no_ctcf_open_within_tss = no_ctcf_open_within_tss.sort()
-
+	
 	no_ctcf_closed_within_tss = tss_no_ctcf.intersect(bed_dnase, v = True)
 	no_ctcf_closed_within_tss = no_ctcf_closed_within_tss.sort()
-
+	
 	#Classifying putative enhancers
-	overlaps_4me1 = no_tss.intersect(bed_4me1)
+	overlaps_4me1 = no_tss.intersect(bed_4me1, u = True)
 
-	active_enhancer = overlaps_4me1.intersect(bed_27ac)
+	active_enhancer = overlaps_4me1.intersect(bed_27ac, u = True)
 	active_enhancer = active_enhancer.sort()
 
-	poised_enhancer = overlaps_4me1.intersect(bed_27me3)
+	poised_enhancer = overlaps_4me1.intersect(bed_27me3, u = True)
 	poised_enhancer = poised_enhancer.sort()
 
-	active_and_poised = active_enhancer + poised_enhancer
-	primed_enhancer = overlaps_4me1.intersect(active_and_poised, v = True)
+	primed_enhancer = overlaps_4me1.intersect(active_enhancer, v = True)
+	primed_enhancer = primed_enhancer.intersect(poised_enhancer, v = True)
 	primed_enhancer = primed_enhancer.sort()
 
 	###Further classify unclassified enhancer-like regions
-	active_poised_primed = active_and_poised + primed_enhancer
-	unclassified_no_tss = no_tss.intersect(active_poised_primed, v = True)
-
-	no_tss_overlaps_ctcf = unclassified_no_tss.intersect(bed_ctcf)
+	unclassified_no_tss = no_tss.intersect(active_enhancer, v = True)
+	unclassified_no_tss = no_tss.intersect(poised_enhancer, v = True)
+	unclassified_no_tss = no_tss.intersect(primed_enhancer, v = True)
+	
+	no_tss_overlaps_ctcf = unclassified_no_tss.intersect(bed_ctcf, u = True)
 	no_tss_no_ctcf = unclassified_no_tss.intersect(bed_ctcf, v = True)
 
-	ctcf_open_no_tss = no_tss_overlaps_ctcf.intersect(bed_dnase)
+	ctcf_open_no_tss = no_tss_overlaps_ctcf.intersect(bed_dnase, u = True)
 	ctcf_open_no_tss = ctcf_open_no_tss.sort()
 
 	ctcf_closed_no_tss = no_tss_overlaps_ctcf.intersect(bed_dnase, v = True)
 	ctcf_closed_no_tss = ctcf_closed_no_tss.sort()
 
-	no_ctcf_open_no_tss = no_tss_no_ctcf.intersect(bed_dnase)
+	no_ctcf_open_no_tss = no_tss_no_ctcf.intersect(bed_dnase, u = True)
 	no_ctcf_open_no_tss = no_ctcf_open_no_tss.sort()
 
 	no_ctcf_closed_no_tss = no_tss_no_ctcf.intersect(bed_dnase, v = True)
@@ -1017,36 +1029,55 @@ for tissue in tissue_array:
 		concatenated_df.drop(concatenated_df.columns[-1], axis = 1, inplace = True)
 		concatenated_df[names_array[-1]] = firsts
 	
+	#Merge the original input file with the functional annotations from the concatenated data frame
+	concatenated_df["col_1"] = concatenated_df["col_1"].astype(int)
+	concatenated_df["col_2"] = concatenated_df["col_2"].astype(int)
+	concatenated_df["col_3"] = concatenated_df["col_3"].astype(int)
+	
+	file_input_colnames = file_input.columns
+	chr_file_input = file_input_colnames[chr_col]
+	start_file_input = file_input_colnames[start_col]
+	end_file_input = file_input_colnames[end_col]
+	
+	merged_df = file_input.merge(concatenated_df, how = "left", left_on = [chr_file_input, start_file_input, end_file_input], right_on = ["col_1", "col_2", "col_3"])
+	merged_df = merged_df.drop(columns = ["col_1", "col_2", "col_3"])
+	
+	#Rename the functional annotation column with the tissue of interest
+	n_cols_merged_df = len(merged_df.columns)
+	names_array_merged_df = []
+	for i in range(0, n_cols_merged_df):
+		colname = merged_df.columns[i]
+		names_array_merged_df.append(colname)
+		
+	if tissue == "user_provided_files" or tissue == "user_provided_urls":
+		names_array_merged_df[-1] = user_tissue_names_array[user_files_index].upper() + "_FUNCTIONAL_ANNOTATION"
+		user_files_index += 1
+	else:
+		names_array_merged_df[-1] = tissue.upper() + "_FUNCTIONAL_ANNOTATION"
+		
+	merged_df.columns = names_array_merged_df
+	
+	last_merged_df_column = names_array_merged_df[-1]
+	
 	#Write out the number of peaks/coordinates in each category. Also print this statement to the console if verbose mode is enabled
 	if tissue == "user_provided_files" or tissue == "user_provided_urls":
-		reg_element_counts_str = "Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_open_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_within_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_within_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_open_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_beyond_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n".format(specified_tissue_type = user_tissue_names_array[user_files_index], active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin;ctcf_binding_site;within_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin;ctcf_binding_site;within_"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin_within_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin_within_"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin;ctcf_binding_site;beyond_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin;ctcf_binding_site;beyond_"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin_beyond_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin_beyond_"), concatenated_df[last_col])).count(True), tss_dist_upstream = str(args.tss_distance_upstream), tss_dist_downstream = str(args.tss_distance_downstream))
+		reg_element_counts_str = "Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_open_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_within_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_within_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_open_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_beyond_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n".format(specified_tissue_type = user_tissue_names_array[user_files_index], active_promoter_count = list(map(lambda x: str(x).startswith("active_promoter"), merged_df[last_merged_df_column])).count(True), bivalent_promoter_count = list(map(lambda x: str(x).startswith("bivalent_promoter"), merged_df[last_merged_df_column])).count(True), silenced_promoter_count = list(map(lambda x: str(x).startswith("silenced_promoter"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin;ctcf_binding_site;within_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin;ctcf_binding_site;within_"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin_within_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin_within_"), merged_df[last_merged_df_column])).count(True), active_enhancer_count = list(map(lambda x: str(x).startswith("active_enhancer"), merged_df[last_merged_df_column])).count(True), poised_enhancer_count = list(map(lambda x: str(x).startswith("poised_enhancer"), merged_df[last_merged_df_column])).count(True), primed_enhancer_count = list(map(lambda x: str(x).startswith("primed_enhancer"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin;ctcf_binding_site;beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin;ctcf_binding_site;beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin_beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin_beyond_"), merged_df[last_merged_df_column])).count(True), tss_dist_upstream = str(args.tss_distance_upstream), tss_dist_downstream = str(args.tss_distance_downstream))
 		with open((user_tissue_names_array[user_files_index] + "_" + args.output + ".func_anno_summary.txt"), "w") as sum_file:
 			sum_file.write(reg_element_counts_str)
 		if args.verbose:
 			print(reg_element_counts_str)
 	else:
-		reg_element_counts_str = "Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_open_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_within_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_within_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_open_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_beyond_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_beyond_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n".format(specified_tissue_type = tissue, active_promoter_count = list(map(lambda x: x.startswith("active_promoter"), concatenated_df[last_col])).count(True), bivalent_promoter_count = list(map(lambda x: x.startswith("bivalent_promoter"), concatenated_df[last_col])).count(True), silenced_promoter_count = list(map(lambda x: x.startswith("silenced_promoter"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin;ctcf_binding_site;within_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin;ctcf_binding_site;within_"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin_within_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_within_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin_within_"), concatenated_df[last_col])).count(True), active_enhancer_count = list(map(lambda x: x.startswith("active_enhancer"), concatenated_df[last_col])).count(True), poised_enhancer_count = list(map(lambda x: x.startswith("poised_enhancer"), concatenated_df[last_col])).count(True), primed_enhancer_count = list(map(lambda x: x.startswith("primed_enhancer"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin;ctcf_binding_site;beyond_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin;ctcf_binding_site;beyond_"), concatenated_df[last_col])).count(True), unclassified_open_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_open_chromatin_beyond_"), concatenated_df[last_col])).count(True), unclassified_closed_chromatin_beyond_range_of_tss_count = list(map(lambda x: x.startswith("unclassified_closed_chromatin_beyond_"), concatenated_df[last_col])).count(True), tss_dist_upstream = str(args.tss_distance_upstream), tss_dist_downstream = str(args.tss_distance_downstream))
+		reg_element_counts_str = "Identified regions in {specified_tissue_type}:\nPutative Promoters\n{active_promoter_count} regions in an active promoter\n{bivalent_promoter_count} regions in a bivalent promoter\n{silenced_promoter_count} regions in a silenced promoter\n{unclassified_open_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_within_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_within_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_within_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), within {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n\nPutative Enhancers\n{active_enhancer_count} regions in an active enhancer\n{poised_enhancer_count} regions in a poised enhancer\n{primed_enhancer_count} in a primed enhancer\n{unclassified_open_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within an open region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count} regions in a CTCF binding site within a closed region of chromatin, beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_open_chromatin_beyond_range_of_tss_count} regions within an open region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n{unclassified_closed_chromatin_beyond_range_of_tss_count} regions within a closed region of chromatin (non-CTCF binding site), beyond {tss_dist_upstream} bp upstream or {tss_dist_downstream} bp downstream of a TSS\n".format(specified_tissue_type = tissue, active_promoter_count = list(map(lambda x: str(x).startswith("active_promoter"), merged_df[last_merged_df_column])).count(True), bivalent_promoter_count = list(map(lambda x: str(x).startswith("bivalent_promoter"), merged_df[last_merged_df_column])).count(True), silenced_promoter_count = list(map(lambda x: str(x).startswith("silenced_promoter"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin;ctcf_binding_site;within_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_ctcf_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin;ctcf_binding_site;within_"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin_within_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_within_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin_within_"), merged_df[last_merged_df_column])).count(True), active_enhancer_count = list(map(lambda x: str(x).startswith("active_enhancer"), merged_df[last_merged_df_column])).count(True), poised_enhancer_count = list(map(lambda x: str(x).startswith("poised_enhancer"), merged_df[last_merged_df_column])).count(True), primed_enhancer_count = list(map(lambda x: str(x).startswith("primed_enhancer"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin;ctcf_binding_site;beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_ctcf_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin;ctcf_binding_site;beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_open_chromatin_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_open_chromatin_beyond_"), merged_df[last_merged_df_column])).count(True), unclassified_closed_chromatin_beyond_range_of_tss_count = list(map(lambda x: str(x).startswith("unclassified_closed_chromatin_beyond_"), merged_df[last_merged_df_column])).count(True), tss_dist_upstream = str(args.tss_distance_upstream), tss_dist_downstream = str(args.tss_distance_downstream))
 		with open((tissue + "_" + args.output + ".func_anno_summary.txt"), "w") as sum_file:
 			sum_file.write(reg_element_counts_str)
 		if args.verbose:
 				print(reg_element_counts_str)
-
-	#Append the functional annotations onto the original input
-	annotations = concatenated_df.iloc[:,-1]
-	annotations = annotations.reset_index(drop = True)
-	file_input = file_input.reset_index(drop = True)
-	if tissue == "user_provided_files" or tissue == "user_provided_urls":
-		func_anno_colname = user_tissue_names_array[user_files_index].upper() + "_FUNCTIONAL_ANNOTATION"
-		user_files_index += 1
-	else:
-		func_anno_colname = tissue.upper() + "_FUNCTIONAL_ANNOTATION"
-	file_input[func_anno_colname] = annotations
 
 #Output the final annotated file
 if args.verbose:
 		print("Preparing output file ({output_file})...".format(output_file = args.output))
 		print("\n")
 if args.input_header:
-	file_input.to_csv(args.output, sep = "\t", index = False)
+	merged_df.to_csv(args.output, sep = "\t", index = False)
 else:
-	file_input.to_csv(args.output, sep = "\t", header = False, index = False)
+	merged_df.to_csv(args.output, sep = "\t", header = False, index = False)
