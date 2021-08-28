@@ -279,9 +279,9 @@ The columns of the input file (1-indexed) containing the chr, start coordinate, 
 * ```--input_header```\
 Specifies that the input file does have a header\
 \
-The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.\
+The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.
 
-## References\
+## References
 [1] Sha K, Boyer LA. The chromatin signature of pluripotent cells. StemBook. Cambridge (MA): Harvard Stem Cell Institute; 2009. doi:10.3824/stembook.1.45.1\
 \
 [2] Mas G, Blanco E, Ballaré C, Sansó M, Spill YG, Hu D, et al. Promoter bivalency favors an open chromatin architecture in embryonic stem cells. Nat Genet. 2018;50: 1452–1462. doi:10.1038/s41588-018-0218-5\
