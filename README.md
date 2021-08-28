@@ -281,17 +281,30 @@ Specifies that the input file does have a header\
 \
 The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.\
 
-## References
-Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424. doi:10.1093/bioinformatics/btr539
-
-Abugessaisa I, Noguchi S, Hasegawa A, Kondo A, Kawaji H, Carninci P, et al. refTSS: A Reference Data Set for Human and Mouse Transcription Start Sites. J Mol Biol. 2019;431: 2407–2422. doi:10.1016/j.jmb.2019.04.045
-
-Hinrichs AS, Karolchik D, Baertsch R, Barber GP, Bejerano G, Clawson H, et al. The UCSC Genome Browser Database: update 2006. Nucleic Acids Res. 2006;34: D590–8. doi:10.1093/nar/gkj144
-
-McKinney W. Data Structures for Statistical Computing in Python. Proceedings of the 9th Python in Science Conference. 2010. doi:10.25080/majora-92bf1922-00a
-
-Sha K, Boyer LA. The chromatin signature of pluripotent cells. StemBook. Cambridge (MA): Harvard Stem Cell Institute; 2009. doi:10.3824/stembook.1.45.1
-
-Mas G, Blanco E, Ballaré C, Sansó M, Spill YG, Hu D, et al. Promoter bivalency favors an open chromatin architecture in embryonic stem cells. Nat Genet. 2018;50: 1452–1462. doi:10.1038/s41588-018-0218-5
-
-Shlyueva D, Stampfel G, Stark A. Transcriptional enhancers: from properties to genome-wide predictions. Nat Rev Genet. 2014;15: 272–286. doi:10.1038/nrg3682
+## References\
+[1] Sha K, Boyer LA. The chromatin signature of pluripotent cells. StemBook. Cambridge (MA): Harvard Stem Cell Institute; 2009. doi:10.3824/stembook.1.45.1\
+\
+[2] Mas G, Blanco E, Ballaré C, Sansó M, Spill YG, Hu D, et al. Promoter bivalency favors an open chromatin architecture in embryonic stem cells. Nat Genet. 2018;50: 1452–1462. doi:10.1038/s41588-018-0218-5\
+\
+[3] Shlyueva D, Stampfel G, Stark A. Transcriptional enhancers: from properties to genome-wide predictions. Nat Rev Genet. 2014;15: 272–286. doi:10.1038/nrg3682\
+\
+[4] Boyle AP, Davis S, Shulha HP, Meltzer P, Margulies EH, Weng Z, et al. High-resolution mapping and characterization of open chromatin across the genome. Cell. 2008;132: 311–322. doi:10.1016/j.cell.2007.12.014\
+\
+[5] Ong C-T, Corces VG. CTCF: an architectural protein bridging genome topology and function. Nat Rev Genet. 2014;15: 234–246. doi:10.1038/nrg3663\
+\
+[6] Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424. doi:10.1093/bioinformatics/btr539\
+\
+[7] McKinney W. Data Structures for Statistical Computing in Python. Proceedings of the 9th Python in Science Conference. 2010. doi:10.25080/majora-92bf1922-00a\
+\
+[8] ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, et al. Expanded encyclopaedias of DNA elements in the human and mouse genomes. Nature. 2020;583: 699–710. doi:10.1038/s41586-020-2493-4\
+\
+[9] Roadmap Epigenomics Consortium, Kundaje A, Meuleman W, Ernst J, Bilenky M, Yen A, et al. Integrative analysis of 111 reference human epigenomes. Nature. 2015;518: 317–330. doi:10.1038/nature14248\
+\
+[10] Hinrichs AS, Karolchik D, Baertsch R, Barber GP, Bejerano G, Clawson H, et al. The UCSC Genome Browser Database: update 2006. Nucleic Acids Res. 2006;34: D590–8. doi:10.1093/nar/gkj144\
+\
+[11] Abugessaisa I, Noguchi S, Hasegawa A, Kondo A, Kawaji H, Carninci P, et al. refTSS: A Reference Data Set for Human and Mouse Transcription Start Sites. J Mol Biol. 2019;431: 2407–2422. doi:10.1016/j.jmb.2019.04.045\
+\
+[12] Buniello A, MacArthur JAL, Cerezo M, Harris LW, Hayhurst J, Malangone C, McMahon A, Morales J, Mountjoy E, Sollis E, Suveges D, Vrousgou O, Whetzel PL, Amode R, Guillen JA, Riat HS, Trevanion SJ, Hall P, Junkins H, Flicek P, Burdett T, Hindorff LA, Cunningham F and Parkinson H. The NHGRI-EBI GWAS Catalog of published genome-wide association studies, targeted arrays and summary statistics 2019.
+Nucleic Acids Research, 2019, Vol. 47 (Database issue): D1005-D1012.\
+\
+[13] Pan-UKB team. https://pan.ukbb.broadinstitute.org. 2020.
