@@ -1424,14 +1424,18 @@ for tissue in tissue_array:
 		concatenated_df[names_array[-1]] = firsts
 	
 	#Merge the original input file with the functional annotations from the concatenated data frame
-	concatenated_df["col_1"] = concatenated_df["col_1"].astype(int)
-	concatenated_df["col_2"] = concatenated_df["col_2"].astype(int)
-	concatenated_df["col_3"] = concatenated_df["col_3"].astype(int)
+	concatenated_df["col_1"] = concatenated_df["col_1"].astype(str)
+	concatenated_df["col_2"] = concatenated_df["col_2"].astype(str)
+	concatenated_df["col_3"] = concatenated_df["col_3"].astype(str)
 	
 	file_input_colnames = file_input.columns
 	chr_file_input = file_input_colnames[chr_col]
 	start_file_input = file_input_colnames[start_col]
 	end_file_input = file_input_colnames[end_col]
+	
+	file_input[chr_file_input] = file_input[chr_file_input].astype(str)
+	file_input[start_file_input] = file_input[start_file_input].astype(str)
+	file_input[end_file_input] = file_input[end_file_input].astype(str)
 	
 	merged_df = file_input.merge(concatenated_df, how = "left", left_on = [chr_file_input, start_file_input, end_file_input], right_on = ["col_1", "col_2", "col_3"])
 	merged_df = merged_df.drop(columns = ["col_1", "col_2", "col_3"])
