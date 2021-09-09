@@ -13,8 +13,8 @@ parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human or mouse reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38, GRCh37/hg19, GRCm39/mm39, GRCm38/mm10, or GRCm37/mm9)")
 parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid human options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, All, User_provided_files, User_provided_urls; valid mouse options: User_provided_files, User_provided_urls)")
-parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
-parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS (default: 2000 bp)", default = 2000)
+parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS (default: 5000 bp)", default = 5000)
+parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = False, help = "the downstream boundary distance from a TSS (default: 1000 bp)", default = 1000)
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
 parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
@@ -1225,7 +1225,7 @@ for tissue in tissue_array:
 		bed_dnase = pybedtools.BedTool("ref_files/" + tissue + "_dnase_" + bed_ref + ".bed.gz")
 
 	###Compare the input file to the reference bed files, starting with the modified TSS bed
-	##Do the peaks fall within 2 kb of a TSS?
+	##Do the peaks fall within boundary of a TSS?
 	overlaps_tss = bed_input.intersect(bed_tss, u = True)
 	overlaps_tss = overlaps_tss.sort()
 	#print(overlaps_tss.count())
