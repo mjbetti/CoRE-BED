@@ -279,7 +279,10 @@ The columns of the input file (1-indexed) containing the chr, start coordinate, 
 * ```--input_header```\
 Specifies that the input file does have a header\
 \
-The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.
+The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.\
+
+## Genome-wide regulatory element sets
+UCSC BED files with genome-wide promoter and enhancer annotations across all 28 CoRE-BED  tissue types are available in the ```genome-wide_reg_elements``` directory.
 
 ## References
 [1] Sha K, Boyer LA. The chromatin signature of pluripotent cells. StemBook. Cambridge (MA): Harvard Stem Cell Institute; 2009. doi:10.3824/stembook.1.45.1\
@@ -292,19 +295,44 @@ The final output file will retain all of the columns of the original input, with
 \
 [5] Ong C-T, Corces VG. CTCF: an architectural protein bridging genome topology and function. Nat Rev Genet. 2014;15: 234–246. doi:10.1038/nrg3663\
 \
-[6] Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424. doi:10.1093/bioinformatics/btr539\
+[6] McKinney W. Data Structures for Statistical Computing in Python. Proceedings of the 9th Python in Science Conference. 2010. doi:10.25080/majora-92bf1922-00a\
 \
-[7] McKinney W. Data Structures for Statistical Computing in Python. Proceedings of the 9th Python in Science Conference. 2010. doi:10.25080/majora-92bf1922-00a\
+[7] Dale RK, Pedersen BS, Quinlan AR. Pybedtools: a flexible Python library for manipulating genomic datasets and annotations. Bioinformatics. 2011;27: 3423–3424. doi:10.1093/bioinformatics/\
 \
-[8] ENCODE Project Consortium, Moore JE, Purcaro MJ, Pratt HE, Epstein CB, Shoresh N, et al. Expanded encyclopaedias of DNA elements in the human and mouse genomes. Nature. 2020;583: 699–710. doi:10.1038/s41586-020-2493-4\
+[8] Hinrichs AS, Karolchik D, Baertsch R, Barber GP, Bejerano G, Clawson H, et al. The UCSC Genome Browser Database: update 2006. Nucleic Acids Res. 2006;34: D590–8. doi:10.1093/nar/gkj144\
 \
-[9] Roadmap Epigenomics Consortium, Kundaje A, Meuleman W, Ernst J, Bilenky M, Yen A, et al. Integrative analysis of 111 reference human epigenomes. Nature. 2015;518: 317–330. doi:10.1038/nature14248\
+[9] Abugessaisa I, Noguchi S, Hasegawa A, Kondo A, Kawaji H, Carninci P, et al. refTSS: A Reference Data Set for Human and Mouse Transcription Start Sites. J Mol Biol. 2019;431: 2407–2422. doi:10.1016/j.jmb.2019.04.045\
 \
-[10] Hinrichs AS, Karolchik D, Baertsch R, Barber GP, Bejerano G, Clawson H, et al. The UCSC Genome Browser Database: update 2006. Nucleic Acids Res. 2006;34: D590–8. doi:10.1093/nar/gkj144\
-\
-[11] Abugessaisa I, Noguchi S, Hasegawa A, Kondo A, Kawaji H, Carninci P, et al. refTSS: A Reference Data Set for Human and Mouse Transcription Start Sites. J Mol Biol. 2019;431: 2407–2422. doi:10.1016/j.jmb.2019.04.045\
-\
-[12] Buniello A, MacArthur JAL, Cerezo M, Harris LW, Hayhurst J, Malangone C, McMahon A, Morales J, Mountjoy E, Sollis E, Suveges D, Vrousgou O, Whetzel PL, Amode R, Guillen JA, Riat HS, Trevanion SJ, Hall P, Junkins H, Flicek P, Burdett T, Hindorff LA, Cunningham F and Parkinson H. The NHGRI-EBI GWAS Catalog of published genome-wide association studies, targeted arrays and summary statistics 2019.
+[10] Buniello A, MacArthur JAL, Cerezo M, Harris LW, Hayhurst J, Malangone C, McMahon A, Morales J, Mountjoy E, Sollis E, Suveges D, Vrousgou O, Whetzel PL, Amode R, Guillen JA, Riat HS, Trevanion SJ, Hall P, Junkins H, Flicek P, Burdett T, Hindorff LA, Cunningham F and Parkinson H.
+The NHGRI-EBI GWAS Catalog of published genome-wide association studies, targeted arrays and summary statistics 2019.
 Nucleic Acids Research, 2019, Vol. 47 (Database issue): D1005-D1012.\
 \
-[13] Pan-UKB team. https://pan.ukbb.broadinstitute.org. 2020.
+[11] Pan-UKB team. https://pan.ukbb.broadinstitute.org. 2020.\
+\
+[12] Nasser J, Bergman DT, Fulco CP, Guckelberger P, Doughty BR, Patwardhan TA, et al. Genome-wide enhancer maps link risk variants to disease genes. Nature. 2021;593: 238–243. doi:10.1038/s41586-021-03446-x\
+\
+[13] Fulco CP, Nasser J, Jones TR, Munson G, Bergman DT, Subramanian V, et al. Activity-by-contact model of enhancer–promoter regulation from thousands of CRISPR perturbations. Nat Genet. 2019;51: 1664–1669. doi:10.1038/s41588-019-0538-0\
+\
+[14] Khan A, Mathelier A. Intervene: a tool for intersection and visualization of multiple gene or genomic region sets. BMC Bioinformatics. 2017;18: 287. doi:10.1186/s12859-017-1708-7\
+\
+[15] GTEx Consortium. The GTEx Consortium atlas of genetic regulatory effects across human tissues. Science. 2020;369: 1318–1330. doi:10.1126/science.aaz1776\
+\
+[16] Dao LTM, Spicuglia S. Transcriptional regulation by promoters with enhancer function. Transcription. 2018;9: 307–314. doi:10.1080/21541264.2018.1486150\
+\
+[17] Keifer J. Primetime for Learning Genes. Genes. 2017;8. doi:10.3390/genes8020069\
+\
+[18] Quinlan AR, Hall IM. BEDTools: a flexible suite of utilities for comparing genomic features. Bioinformatics. 2010;26: 841–842. doi:10.1093/bioinformatics/btq033\
+\
+[19] Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M, Kokocinski F, et al. GENCODE: the reference human genome annotation for The ENCODE Project. Genome Res. 2012;22: 1760–1774. doi:10.1101/gr.135350.111\
+\
+[20] Liao Y, Wang J, Jaehnig EJ, Shi Z, Zhang B. WebGestalt 2019: gene set analysis toolkit with revamped UIs and APIs. Nucleic Acids Res. 2019;47: W199–W205. doi:10.1093/nar/gkz401\
+\
+[21] Stelzer G, Rosen N, Plaschkes I, Zimmerman S, Twik M, Fishilevich S, et al. The GeneCards Suite: From Gene Data Mining to Disease Genome Sequence Analyses. Curr Protoc Bioinformatics. 2016;54: 1.30.1–1.30.33. doi:10.1002/cpbi.5\
+\
+[22] Loos RJF. 15 years of genome-wide association studies and no signs of slowing down. Nat Commun. 2020;11: 5900. doi:10.1038/s41467-020-19653-5\
+\
+[23] Uffelmann E, Huang QQ, Munung NS, de Vries J, Okada Y, Martin AR, et al. Genome-wide association studies. Nature Reviews Methods Primers. 2021;1: 1–21. doi:10.1038/s43586-021-00056-9\
+\
+[24] Stranger BE, Stahl EA, Raj T. Progress and promise of genome-wide association studies for human complex trait genetics. Genetics. 2011;187: 367–383. doi:10.1534/genetics.110.120907\
+\
+[25] Wang K, Li M, Hakonarson H. ANNOVAR: Functional annotation of genetic variants from high-throughput sequencing data. Nucleic Acids Res. 2010;38: 1–7. doi:10.1093/nar/gkq603
