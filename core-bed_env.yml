@@ -50,3 +50,7 @@ dependencies:
   - wheel
   - xz
   - zlib
+  - tabix
+  - ucsc-bigwigmerge
+  - ucsc-bigwigtobedgraph
+  - macs2 
