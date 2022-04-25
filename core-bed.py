@@ -179,8 +179,8 @@ if args.ref_genome.lower() == "hg38" or args.ref_genome.lower() == "grch38":
 				download_ref("https://www.encodeproject.org/files/ENCFF093NQC/@@download/ENCFF093NQC.bed.gz", "cultured_fibroblast_4me3_hg38.bed.gz")
 			if not os.path.exists(args.ref_dir + "/cultured_fibroblast_27ac_hg38.bed.gz"):
 				download_ref("https://www.encodeproject.org/files/ENCFF805GNH/@@download/ENCFF805GNH.bed.gz", "cultured_fibroblast_27ac_hg38.bed.gz")
-			if not os.path.exists(args.ref_dir + "/cultured_fibroblast_27ac_hg38.bed.gz"):
-				download_ref("https://www.encodeproject.org/files/ENCFF336IXL/@@download/ENCFF336IXL.bed.gz", "cultured_fibroblast_27ac_hg38.bed.gz")
+			if not os.path.exists(args.ref_dir + "/cultured_fibroblast_27me3_hg38.bed.gz"):
+				download_ref("https://www.encodeproject.org/files/ENCFF336IXL/@@download/ENCFF336IXL.bed.gz", "cultured_fibroblast_27me3_hg38.bed.gz")
 			#if not os.path.exists(args.ref_dir + "/cultured_fibroblast_36me3_hg38.bed.gz"):
 				#download_ref("https://www.encodeproject.org/files/ENCFF449ADN/@@download/ENCFF449ADN.bed.gz", "cultured_fibroblast_36me3_hg38.bed.gz")
 			if not os.path.exists(args.ref_dir + "/cultured_fibroblast_ctcf_hg38.bed.gz"):
