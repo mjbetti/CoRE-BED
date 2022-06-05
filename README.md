@@ -8,7 +8,9 @@ A Python-based implementation was developed to classify the regulatory identitie
 ![Fig1](https://user-images.githubusercontent.com/63562495/170776006-020a963f-cbf8-43f3-a299-8b4775047df9.png)
 
 ## Cite CoRE-BED 
-Michael J. Betti, Melinda C. Aldrich, Eric R. Gamazon. "CoRE-BED: a cell and tissue context-dependent classifier of regulatory elements" (2022).  
+Betti, M.J., Aldrich, M.C., & Gamazon, E. R. (2022). CoRE-BED: a cell and tissue context-dependent classifier of regulatory elements. Preprint.  
+Betti, M.J., Aldrich, M.C., & Gamazon, E. R. (2022). CoRE-BED annotations (Version 1). Zenodo. 10.5281/zenodo.6599920  
+
 For questions:  michael.j.betti@vanderbilt.edu, eric.gamazon@vumc.org  
 
 ## CoRE-BED-test script
