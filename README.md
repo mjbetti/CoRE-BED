@@ -1,4 +1,4 @@
-# CoRE-BED
+# CoRE-BED [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mjbetti/CoRE-BED/blob/master/LICENSE) 
 ## Introduction  
 
 CoRE-BED, or Classifier of Regulatory Elements in BED coordinates, is a framework to generate cell and tissue type dependent annotation of regulatory elements. The CoRE-BED classifier is implemented as a decision tree. The tree structure is learned from training data, generating a classifier (i.e., membership in a class of regulatory elements) whose generalizability is evaluated in test data. Each internal node represents an observation that captures the physical properties of chromatin, nucleosome positioning, or access to DNA; each leaf or terminal node is a class of regulatory elements; and each link is a decision. To determine the optimal tree structure, several structures are evaluated for overlap with a set of fine-mapped expression quantitative trait loci (eQTLs) from GTEx in a broad set of cell and tissue types and for the information gain from the classifier using Shannon entropy.
