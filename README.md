@@ -173,7 +173,7 @@ conda activate core-bed_env
 ## Usage
 Use the ```-h``` or ```--help``` flag to view all available options:
 ```
-<<<<<<< HEAD
+
 python core-bed_test.py --help
 
 usage: core-bed_test.py [-h] -i INPUT [-s SEPARATOR] -g REF_GENOME -t TISSUE
@@ -187,7 +187,7 @@ usage: core-bed_test.py [-h] -i INPUT [-s SEPARATOR] -g REF_GENOME -t TISSUE
                         [--user_tissue_names USER_TISSUE_NAMES] [-v]
                         [-h3k4me1] [-h3k4me3] [-h3k27ac] [-h3k27me3] [-dhs]
                         [-ctcf]
-=======
+			
 python core-bed_test.py -h
 
 usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE
@@ -198,18 +198,15 @@ usage: core-bed.py [-h] -i INPUT -g REF_GENOME -t TISSUE
                    [--user_27ac USER_27AC] [--user_27me3 USER_27ME3]
                    [--user_ctcf USER_CTCF] [--user_dnase USER_DNASE]
                    [--user_tissue_names USER_TISSUE_NAMES] [-v]
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 
 optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
                         the input bed file (required)
-<<<<<<< HEAD
+
   -s SEPARATOR, --separator SEPARATOR
                         the upstream boundary distance from a TSS (default:
                         5000 bp)
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
   -g REF_GENOME, --ref_genome REF_GENOME
                         the human or mouse reference genome build on which the
                         input coordinates are based (required) (valid options:
@@ -239,13 +236,11 @@ optional arguments:
                         the path of the reference file directory
   --no_multianno        if a coordinate overlaps with multiple regions, keep
                         the most significant occurance
-<<<<<<< HEAD
+
   --write_summary       Write out a summary of regulatory counts as a .txt
                         file
   --write_anno_only     Instead of the input file appended with an annotation
                         column, write out only the annotation column
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
   --bed_cols BED_COLS   if the input is not in traditional UCSC BED format,
                         specify the column numbers of chr, start, and end
                         separated by commas
@@ -279,7 +274,6 @@ optional arguments:
                         tissue option is specified, specify the names of each
                         corresponding tissue type
   -v, --verbose         return logging as terminal output
-<<<<<<< HEAD
   -h3k4me1, --only_h3k4me1
                         Instead of full CoRE-BED regulatory annotations, only
                         evaluate input for H3K4me1 overlap in the target
@@ -300,8 +294,6 @@ optional arguments:
                         evaluate input for DHS overlap in the target tissue
   -ctcf, --only_ctcf    Instead of full CoRE-BED regulatory annotations, only
                         evaluate input for CTCF overlap in the target tissue
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 ```
 
 A run of the CoRE-BED method to annotate a set of GWAS summary statistics in a single tissue type would look something like the following:
@@ -388,8 +380,6 @@ The columns of the input file (1-indexed) containing the chr, start coordinate, 
 Specifies that the input file does have a header\
 \
 The final output file will retain all of the columns of the original input, with a newly appended column of CoRE-BED functional annotations.\
-<<<<<<< HEAD
-<<<<<<< HEAD
 \
 Some file types (such as full GWAS summary statistics) are so are large enough to make a sequential run of CoRE-BED across multiple tissues too time-consuming. In this case, we would recommend running each tissue in parallel as a separate job and then creating a composite of the results. In SLURM, this parallelization would look something like the following:
 ```
@@ -417,7 +407,3 @@ for tissue in ${tissue_array[@]}; do
 	--input_header"
 done
 ```
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
