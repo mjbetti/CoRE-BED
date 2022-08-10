@@ -1,56 +1,60 @@
 name: core-bed_env
 channels:
+  - anaconda
   - bioconda
+  - pwwang
+  - blaze
   - defaults
+  - conda-forge
 dependencies:
-  - bedtools
-  - blas
-  - brotlipy
-  - bzip2
-  - ca-certificates
-  - certifi
-  - cffi
-  - chardet
-  - cryptography
-  - curl
-  - idna
-  - intel-openmp
-  - krb5
-  - libcurl
-  - libcxx
-  - libdeflate
-  - libedit
-  - libffi
   - libssh2
-  - mkl
-  - mkl-service
-  - mkl_fft
-  - mkl_random
-  - ncurses
-  - numpy
-  - numpy-base
-  - openssl
-  - pandas
-  - pip
+  - krb5
   - pybedtools
-  - pycparser
-  - pyopenssl
-  - pysam
+  - tk
+  - openssl
+  - pip
+  - wheel
+  - intel-openmp
+  - libcurl
+  - libedit
+  - ca-certificates
+  - python-dateutil
+  - six
+  - pandas
+  - cryptography
+  - urllib3
   - pysocks
   - python=3.6
-  - python-dateutil
+  - libffi
+  - pyopenssl
   - pytz
-  - readline
-  - requests
+  - cffi
+  - numpy
+  - curl
+  - blas
   - setuptools
-  - six
-  - sqlite
-  - tk
-  - urllib3
-  - wheel
-  - xz
-  - zlib
-  - tabix
-  - ucsc-bigwigmerge
+  - mkl-service
+  - pysam
   - ucsc-bigwigtobedgraph
-  - macs2 
+  - sqlite
+  - idna
+  - numpy-base
+  - readline
+  - chardet
+  - zlib
+  - mkl_random
+  - xz
+  - bzip2
+  - libcxx
+  - mkl_fft
+  - ucsc-bigwigmerge
+  - bedtools
+  - brotlipy
+  - pycparser
+  - libdeflate
+  - tabix
+  - certifi
+  - mkl
+  - macs2
+  - ncurses
+  - requests
