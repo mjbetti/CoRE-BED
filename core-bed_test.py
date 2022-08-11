@@ -1,13 +1,10 @@
-<<<<<<< HEAD
 ###Developed by Michael J Betti, April 2021, updated 8 July 2022
 __author__ = "Michael J Betti"
 __license__ = "MIT"
-=======
 ###Developed by Michael J Betti, April 2021, updated 25 February 2022
 __author__ = "Michael J Betti"
 __copyright__ = "Copyright 2021, Michael J Betti"
 __license__ = "BSD"
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 __maintainer__ = "Michael J Betti"
 __email__ = "mjbetti3@gmail.com"
 __status__ = "Development"
@@ -17,10 +14,7 @@ from itertools import chain
 
 parser = argparse.ArgumentParser(add_help = True)
 parser.add_argument("-i", "--input", type = str, required = True, help = "the input bed file (required)")
-<<<<<<< HEAD
 parser.add_argument("-s", "--separator", type = str, required = False, help = "the upstream boundary distance from a TSS (default: 5000 bp)", default = "\t")
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 parser.add_argument("-g", "--ref_genome", type = str, required = True, help = "the human or mouse reference genome build on which the input coordinates are based (required) (valid options: GRCh38/hg38, GRCh37/hg19, GRCm39/mm39, GRCm38/mm10, or GRCm37/mm9)")
 parser.add_argument("-t", "--tissue", type = str, required = True, help = "the tissue of interest (required) (valid human options: Adipose, Adrenal_gland, Artery, Blood, Breast, Cultured_fibroblast, EBV_transformed_lymphocyte, ES, Esophagus_muscularis_mucosa, Esophagus_squamous_epithelium, Heart, Intestine, iPS, Kidney, Liver, Lung, Neuron, Ovary, Pancreas, Prostate, Skeletal_muscle, Skin, Spleen, Stomach, Testis, Thyroid, Uterus, Vagina, All, User_provided_files, User_provided_urls; valid mouse options: User_provided_files, User_provided_urls)")
 parser.add_argument("-ud", "--tss_distance_upstream", type = int, required = False, help = "the upstream boundary distance from a TSS (default: 5000 bp)", default = 5000)
@@ -28,11 +22,8 @@ parser.add_argument("-dd", "--tss_distance_downstream", type = int, required = F
 parser.add_argument("-o", "--output", type = str, required = False, help = "the name of the output file", default = "out.bed")
 parser.add_argument("-r", "--ref_dir", type = str, required = False, help = "the path of the reference file directory", default = "ref_files")
 parser.add_argument("--no_multianno", required = False, help = "if a coordinate overlaps with multiple regions, keep the most significant occurance", action = "store_true")
-<<<<<<< HEAD
 parser.add_argument("--write_summary", required = False, help = "Write out a summary of regulatory counts as a .txt file", action = "store_true")
 parser.add_argument("--write_anno_only", required = False, help = "Instead of the input file appended with an annotation column, write out only the annotation column", action = "store_true")
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 parser.add_argument("--bed_cols", type = str, required = False, help = "if the input is not in traditional UCSC BED format, specify the column numbers of chr, start, and end separated by commas", default = "1,2,3")
 parser.add_argument("--input_header", required = False, help = "use if the input file has a header", action = "store_true")
 parser.add_argument("--user_4me1", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided H3K4me1 ChIP-seq peaks")
@@ -44,15 +35,12 @@ parser.add_argument("--user_ctcf", type = str, required = False, help = "if the 
 parser.add_argument("--user_dnase", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify either the path or URL of the user-provided DNase-seq peaks")
 parser.add_argument("--user_tissue_names", type = str, required = False, help = "if the User_provided_files or User_provided_urls tissue option is specified, specify the names of each corresponding tissue type")
 parser.add_argument("-v", "--verbose", required = False, help = "return logging as terminal output", action = "store_true")
-<<<<<<< HEAD
 parser.add_argument("-h3k4me1", "--only_h3k4me1", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for H3K4me1 overlap in the target tissue", action = "store_true")
 parser.add_argument("-h3k4me3", "--only_h3k4me3", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for H3K4me3 overlap in the target tissue", action = "store_true")
 parser.add_argument("-h3k27ac", "--only_h3k27ac", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for H3K27ac overlap in the target tissue", action = "store_true")
 parser.add_argument("-h3k27me3", "--only_h3k27me3", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for H3K27me3 overlap in the target tissue", action = "store_true")
 parser.add_argument("-dhs", "--only_dhs", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for DHS overlap in the target tissue", action = "store_true")
 parser.add_argument("-ctcf", "--only_ctcf", required = False, help = "Instead of full CoRE-BED regulatory annotations, only evaluate input for CTCF overlap in the target tissue", action = "store_true")
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 args = parser.parse_args()
 
 #Check that required arguments are specified
@@ -88,12 +76,9 @@ elif args.ref_genome.lower() == "mm39" or args.ref_genome.lower() == "grcm39" or
 	assert args.tissue.lower() == "user_provided_files" or args.tissue.lower() == "user_provided_urls", "Tissue type must be one of the 2 valid mouse options (User_provided_files or User_provided_urls)"
 
 #Download the appropriate reference files based on the specified genome build and tissue arguments
-<<<<<<< HEAD
 if not os.path.exists(args.ref_dir):
 	os.mkdir(args.ref_dir)
 
-=======
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 def download_ref(url_ref, out_name):
 	out_path = os.path.join(args.ref_dir, out_name)
 	r = requests.get(url_ref, allow_redirects = True)
@@ -1199,7 +1184,6 @@ bed_tss = pybedtools.BedTool().from_dataframe(bed_tss_orig)
 
 #Import the input file, along with the histone ChIP-seq bed files
 ##Because the raw input file will not necessarily be in UCSC BED format, first import it as a pandas data frame, sort by coordinates, and then input coordinates as a pybedtools object
-<<<<<<< HEAD
 if args.separator == " " or args.separator == "\t":
 	if args.input_header:
 		file_input = pd.read_csv(args.input, delim_whitespace = True, low_memory = False)
@@ -1210,12 +1194,10 @@ else:
 		file_input = pd.read_csv(args.input, delimiter = args.separator, low_memory = False)
 	else:
 		file_input = pd.read_csv(args.input, delimiter = args.separator, header = None, low_memory = False)
-=======
 if args.input_header:
 	file_input = pd.read_csv(args.input, delim_whitespace = True, low_memory = False)
 else:
 	file_input = pd.read_csv(args.input, delim_whitespace = True, header = None, low_memory = False)
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 	
 cols_array = args.bed_cols.split(",")
 chr_col = int(cols_array[0]) - 1
@@ -1267,7 +1249,6 @@ for tissue in tissue_array:
 		#bed_36me3 = pybedtools.BedTool(args.ref_dir + "/" + tissue + "_36me3_" + bed_ref + ".bed.gz")
 		bed_ctcf = pybedtools.BedTool(args.ref_dir + "/" + tissue + "_ctcf_" + bed_ref + ".bed.gz")
 		bed_dnase = pybedtools.BedTool(args.ref_dir + "/" + tissue + "_dnase_" + bed_ref + ".bed.gz")
-<<<<<<< HEAD
 	
 	#If one of the special flags specifying only one epigenomic mark is enabled, then evaluate this overlap. Otherwise, move on to the normal workflow.
 	if args.only_h3k4me1:
@@ -2044,7 +2025,6 @@ for tissue in tissue_array:
 					sum_file.write(reg_element_counts_str)
 			if args.verbose:
 					print(reg_element_counts_str)
-=======
 
 	###Compare the input file to the reference bed files, starting with the modified TSS bed
 	##Do the peaks fall within boundary of a TSS?
@@ -2295,7 +2275,6 @@ for tissue in tissue_array:
 			sum_file.write(reg_element_counts_str)
 		if args.verbose:
 				print(reg_element_counts_str)
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
 
 #Output the final annotated file
 merged_df = merged_df.rename({last_merged_df_column: "dropcol"}, axis=1)
@@ -2306,7 +2285,6 @@ merged_df[anno_df_names] = anno_df
 if args.verbose:
 		print("Preparing output file ({output_file})...".format(output_file = args.output))
 		print("\n")
-<<<<<<< HEAD
 if args.write_anno_only:
 	merged_df = merged_df.iloc[:,-1]
 	merged_df.to_csv(args.output, sep = args.separator, index = False)
@@ -2314,9 +2292,7 @@ elif args.input_header:
 	merged_df.to_csv(args.output, sep = args.separator, index = False)
 else:
 	merged_df.to_csv(args.output, sep = args.separator, header = False, index = False)
-=======
 if args.input_header:
 	merged_df.to_csv(args.output, sep = "\t", index = False)
 else:
 	merged_df.to_csv(args.output, sep = "\t", header = False, index = False)
->>>>>>> 3283f061327aed512684aab1c4b30a7a1c01e0ad
