@@ -8,7 +8,8 @@ An accompanying command line tool was developed to classify the regulatory ident
 ![alt text](https://github.com/mjbetti/CoRE-BED/blob/main/Fig1.png?raw=true)
 
 ## Cite CoRE-BED 
-Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). *Maximum-entropy integrative epigenomic framework reveals regulatory mechanisms at human disease loci*. Preprint.  
+Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). *Maximum-entropy integrative epigenomic framework reveals regulatory mechanisms at human disease loci*. Preprint.
+
 Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). CoRE-BED datasets (Version 2). Zenodo. 10.5281/zenodo.7558115
 
 For questions:  michael.j.betti@vanderbilt.edu, eric.gamazon@vumc.org  
