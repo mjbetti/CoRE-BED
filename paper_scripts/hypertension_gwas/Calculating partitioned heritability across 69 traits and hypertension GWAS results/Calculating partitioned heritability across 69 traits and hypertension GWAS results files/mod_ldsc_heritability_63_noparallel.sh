@@ -1,0 +1,12 @@
+gwas_array=("PASS_ADHD_Demontis2018" "PASS_AgeFirstBirth" "PASS_Alzheimers_Jansen2019"
+"PASS_Anorexia" "PASS_AtrialFibrillation_Nielsen2018" "PASS_Autism" "PASS_BDSCZ_Ruderfer2018" "PASS_BMI1" "PASS_CD_deLange2017" "PASS_Celiac" "PASS_CigarettesPerDay_Liu2019" "PASS_Coronary_Artery_Disease" "PASS_DrinksPerWeek_Liu2019" "PASS_Ever_Smoked" "PASS_GeneralRiskTolerance_KarlssonLinner2019" "PASS_HDL" "PASS_Height1" "PASS_IBD_deLange2017" "PASS_Insomnia_Jansen2019" "PASS_Intelligence_SavageJansen2018" "PASS_IschemicStroke_Malik2018" "PASS_LDL" "PASS_Lupus" "PASS_MDD_Wray2018" "PASS_MedicationUse_Wu2019" "PASS_NumberChildrenEverBorn" "PASS_ProstateCancer" "PASS_ReactionTime_Davies2018" "PASS_Rheumatoid_Arthritis" "PASS_SCZvsBD_Ruderfer2018" "PASS_SleepDuration_Dashti2019" "PASS_Type_2_Diabetes" "PASS_UC_deLange2017" "PASS_Years_of_Education1" "UKB_460K.biochemistry_AlkalinePhosphatase" "UKB_460K.biochemistry_AspartateAminotransferase" "UKB_460K.biochemistry_Cholesterol" "UKB_460K.biochemistry_Creatinine" "UKB_460K.biochemistry_IGF1" "UKB_460K.biochemistry_Phosphate" "UKB_460K.biochemistry_Testosterone_Male" "UKB_460K.biochemistry_TotalBilirubin" "UKB_460K.biochemistry_TotalProtein" "UKB_460K.biochemistry_VitaminD" "UKB_460K.blood_EOSINOPHIL_COUNT" "UKB_460K.blood_PLATELET_COUNT" "UKB_460K.blood_RBC_DISTRIB_WIDTH" "UKB_460K.blood_RED_COUNT" "UKB_460K.blood_WHITE_COUNT" "UKB_460K.bmd_HEEL_TSCOREz" "UKB_460K.body_BALDING1" "UKB_460K.body_BMIz" "UKB_460K.body_HEIGHTz" "UKB_460K.body_WHRadjBMIz" "UKB_460K.bp_DIASTOLICadjMEDz" "UKB_460K.cancer_BREAST" "UKB_460K.cancer_PROSTATE" "UKB_460K.cov_EDU_YEARS" "UKB_460K.disease_AID_SURE" "UKB_460K.disease_ALLERGY_ECZEMA_DIAGNOSED" "UKB_460K.disease_HYPOTHYROIDISM_SELF_REP" "UKB_460K.lung_FEV1FVCzSMOKE" "UKB_460K.lung_FVCzSMOKE" "UKB_460K.mental_NEUROTICISM" "UKB_460K.other_MORNINGPERSON" "UKB_460K.pigment_SUNBURN" "UKB_460K.repro_MENARCHE_AGE" "UKB_460K.repro_MENOPAUSE_AGE" "UKB_460K.repro_NumberChildrenEverBorn_Pooled")
+
+for gwas in ${gwas_array[@]}; do
+python /home/bettimj/ldsc/ldsc.py \
+--h2 /home/bettimj/gamazon_rotation/core-bed_analysis/s2g_snps/h2/sum_stats/$gwas\.sumstats.gz \
+--ref-ld-chr /home/bettimj/gamazon_rotation/mod_core-bed/uk_biobank/h2/anno_1000G/core_bed_EUR.QC. \
+--w-ld-chr /home/bettimj/ldsc/weights_hm3_no_hla/weights. \
+--overlap-annot \
+--frqfile-chr /home/bettimj/ldsc/1000G_Phase3_frq/1000G_Phase3_frq/1000G.EUR.QC. \
+--out $gwas\_h2
+done

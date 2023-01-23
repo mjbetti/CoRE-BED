@@ -24,7 +24,7 @@ dependencies:
   - cryptography
   - urllib3
   - pysocks
-  - python=3.6
+  - python=3.7
   - libffi
   - pyopenssl
   - pytz
@@ -58,3 +58,5 @@ dependencies:
   - macs2
   - ncurses
   - requests
+  - libgfortran4
+  - scikit-learn

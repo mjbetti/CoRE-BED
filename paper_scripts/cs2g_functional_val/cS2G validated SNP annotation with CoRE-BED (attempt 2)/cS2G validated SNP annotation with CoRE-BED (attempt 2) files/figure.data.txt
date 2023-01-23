@@ -1,0 +1,3 @@
+core_bed	num_variants	num_core_bed_overlap
+All experimentally validated SNPs	25	17
+Accurately linked to predicted gene	11	7
