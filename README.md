@@ -8,7 +8,7 @@ An accompanying command line tool was developed to classify the regulatory ident
 ![alt text](https://github.com/mjbetti/CoRE-BED/blob/main/Fig1.png?raw=true)
 
 ## Cite CoRE-BED 
-Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). *Minimum entropy framework identifies a novel class of genomic functional elements and reveals regulatory mechanisms at human disease loci*. doi: 10.1101/2023.06.11.544507. [Preprint](https://www.biorxiv.org/content/10.1101/2023.06.11.544507v1).
+Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). *Minimum entropy framework identifies a novel class of genomic functional elements and reveals regulatory mechanisms at human disease loci*. doi: 10.1101/2023.06.11.544507. [Preprint](https://www.biorxiv.org/content/10.1101/2023.06.11.544507v2).
 
 Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). CoRE-BED datasets (Version 2). Zenodo. 10.5281/zenodo.7558115
 
