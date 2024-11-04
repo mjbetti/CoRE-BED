@@ -793,3 +793,6 @@ for tissue in ${tissue_array[@]}; do
 	--input_header"
 done
 ```
+
+## CoRE-BED score for SNP-to-gene linking
+Code for computing CoRE-BED scores for cS2G and T2D SNPs can be found in the ```core-bed_score``` directory.
