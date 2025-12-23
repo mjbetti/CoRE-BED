@@ -8,9 +8,11 @@ An accompanying command line tool was developed to classify the regulatory ident
 ![alt text](https://github.com/mjbetti/CoRE-BED/blob/main/Fig1.png?raw=true)
 
 ## Cite CoRE-BED 
-Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). *Minimum entropy framework identifies a novel class of genomic functional elements and reveals regulatory mechanisms at human disease loci*. doi: 10.1101/2023.06.11.544507. [Preprint](https://www.biorxiv.org/content/10.1101/2023.06.11.544507v2).
+Betti M.J., Aldrich M.C., & Gamazon E.R. (2023). "Minimum entropy framework identifies a novel class of genomic functional elements and reveals regulatory mechanisms at human disease loci." *bioRxiv* [Link](https://www.biorxiv.org/content/10.1101/2023.06.11.544507v2).
 
-Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). CoRE-BED datasets (Version 2). Zenodo. 10.5281/zenodo.7558115
+Chatterjee E., Betti M.J., Sheng Q., Lin P., Emont M.P., Li G., Amancherla K., Limpitikul W.B., Whittaker O.R., Luong K., Azzam C., Gee D., Hutter M., Flanders K., Sahu P., Garcia-Contreras M., Gokulnath P., Flynn C.R., Brown J., Yu D., Rosen E.D., Van Keuren-Jensen K., Gamazon E.R., Shah R., Das S.  (2025). "The extracellular vesicle transcriptome provides tissue-specific functional genomic annotation relevant to disease susceptibility in obesity." *Cell Genomics*. [Link](https://doi.org/10.1016/j.xgen.2025.100925.).
+
+Betti, M.J., Aldrich, M.C., & Gamazon, E.R. (2023). CoRE-BED datasets (Version 2). Zenodo. [Link](https://doi.org/10.5281/zenodo.7558115).
 
 For questions:  michael.j.betti@vanderbilt.edu, eric.gamazon@vumc.org  
 
